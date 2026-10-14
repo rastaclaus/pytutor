@@ -6,13 +6,13 @@ line-length = 120
 [lint]
 select = ["ALL"]
 ignore = [
-    "COM812",  # конфликтует с ruff format (magic trailing comma)
-    "ISC001",  # конфликтует с ruff format (однострочные импорты)
-    "D211",    # нет пустой строки перед docstring класса (D203 требует обратное)
-    "D213",    # summary docstring со второй строки (D212 требует обратное)
-    "RUF002",  # неоднозначные unicode-символы в docstring (кириллица)
-    "CPY001",  # требование copyright-заголовка
-    "ANN401",  # запрет typing.Any
+  "COM812",  # конфликтует с ruff format (magic trailing comma)
+  "ISC001",  # конфликтует с ruff format (однострочные импорты)
+  "D211",  # нет пустой строки перед docstring класса (D203 требует обратное)
+  "D213",  # summary docstring со второй строки (D212 требует обратное)
+  "RUF002",  # неоднозначные unicode-символы в docstring (кириллица)
+  "CPY001",  # требование copyright-заголовка
+  "ANN401",  # запрет typing.Any
 ]
 
 [lint.per-file-ignores]

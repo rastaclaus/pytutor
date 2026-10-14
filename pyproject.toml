@@ -3,9 +3,7 @@ name = "pytutor"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-authors = [
-    { name = "Artem Shestopalov", email = "tema.rastaclaus2016@yandex.ru" }
-]
+authors = [{ name = "Artem Shestopalov", email = "tema.rastaclaus2016@yandex.ru" }]
 requires-python = ">=3.14"
 dependencies = []
 
@@ -18,7 +16,7 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
-    "pytest>=9.1.1",
+  "pytest>=9.1.1",
 ]
 
 [tool.pytest.ini_options]
