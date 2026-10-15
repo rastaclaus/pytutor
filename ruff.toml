@@ -3,6 +3,9 @@
 
 line-length = 120
 
+# stubs/ — копии файлов упражнений (шаблоны для сброса), их не линтуем.
+extend-exclude = ["stubs"]
+
 [lint]
 select = ["ALL"]
 ignore = [
@@ -18,6 +21,7 @@ ignore = [
 [lint.per-file-ignores]
 "tests/**" = ["D", "S", "ANN201", "PLR2004", "SLF"]
 "solutions/**" = ["D", "INP001"]
+"scripts/**" = ["D", "INP001", "T201", "RUF001"]
 
 [lint.isort]
 known-first-party = ["pytutor"]

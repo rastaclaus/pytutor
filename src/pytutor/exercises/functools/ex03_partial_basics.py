@@ -30,7 +30,7 @@ def make_multiplier(factor: int) -> Callable[[int], int]:
 
     Подсказка: ``partial(operator.mul, factor)``.
     """
-    return partial(operator.mul, factor)
+    raise NotImplementedError
 
 
 def make_power(exp: int) -> Callable[[int], int]:
@@ -38,7 +38,7 @@ def make_power(exp: int) -> Callable[[int], int]:
 
     Подсказка: ``partial(pow, exp=exp)``.
     """
-    return partial(pow, exp=exp)
+    raise NotImplementedError
 
 
 def add_all(numbers: Iterable[int], amount: int) -> list[int]:
@@ -46,9 +46,9 @@ def add_all(numbers: Iterable[int], amount: int) -> list[int]:
 
     Реализуйте через ``map`` и ``functools.partial``.
     """
-    return list(map(partial(operator.add, amount), numbers))
+    raise NotImplementedError
 
 
 def make_price_formatter(currency: str, decimals: int = 2) -> Callable[[float], str]:
     """Вернуть функцию-форматтер цены с зафиксированными ``currency`` и ``decimals``."""  # noqa: RUF002
-    return partial(format_currency, currency=currency, decimals=decimals)
+    raise NotImplementedError

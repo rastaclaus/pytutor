@@ -25,7 +25,7 @@ def product(numbers: Iterable[int]) -> int:
 
     Произведение пустой последовательности равно 1 (нейтральный элемент).
     """
-    return functools.reduce(operator.mul, numbers, 1)
+    raise NotImplementedError
 
 
 def concat_strings(strings: Iterable[str]) -> str:
@@ -33,7 +33,7 @@ def concat_strings(strings: Iterable[str]) -> str:
 
     Пустая последовательность даёт пустую строку.
     """
-    return functools.reduce(operator.add, strings, "")
+    raise NotImplementedError
 
 
 def sum_with_initial(initial: int, numbers: Iterable[int]) -> int:
@@ -41,7 +41,7 @@ def sum_with_initial(initial: int, numbers: Iterable[int]) -> int:
 
     Для пустой последовательности результатом будет сам ``initial``.
     """
-    return functools.reduce(operator.add, numbers, initial=initial)
+    raise NotImplementedError
 
 def max_or_none(numbers: Iterable[int]) -> int | None:
     """Вернуть максимум последовательности или ``None``, если она пуста.
@@ -49,8 +49,4 @@ def max_or_none(numbers: Iterable[int]) -> int | None:
     Подсказка: используйте ``initializer=None`` и обрабатывайте его внутри
     свёртки, потому что сравнивать числа с ``None`` нельзя.
     """
-    def maximum(a: int | None, b: int) -> int | None:
-        if a is None:
-            return b
-        return max(a, b)
-    return functools.reduce(maximum, numbers, None)
+    raise NotImplementedError

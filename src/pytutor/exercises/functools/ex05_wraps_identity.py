@@ -25,13 +25,8 @@ R = TypeVar("R")
 
 def identity_decorator(func: Callable[..., Any]) -> Callable[..., Any]:
     """Обернуть ``func``, возвращая её результат, но не копируя метаданные."""
-    def wrapper(*args: Any, **kwargs: Any) -> Any:
-        return func(*args, **kwargs)
-    return wrapper
+    raise NotImplementedError
 
 def preserving_decorator[**P, R](func: Callable[P, R]) -> Callable[P, R]:
     """Обернуть ``func``, сохранив метаданные через ``functools.wraps``."""
-    @wraps(func)
-    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
-        return func(*args, **kwargs)
-    return wrapper
+    raise NotImplementedError

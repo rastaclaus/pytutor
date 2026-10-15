@@ -22,9 +22,7 @@ def compose(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
 
     Подсказка: соберите через ``reduce``, применяя функции в обратном порядке.
     """
-    def composed(value: Any) -> Any:
-        return reduce(lambda acc, func: func(acc), reversed(funcs), value)
-    return composed
+    raise NotImplementedError
 
 
 def pipeline(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
@@ -32,9 +30,7 @@ def pipeline(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
 
     ``pipeline(f, g)(x)`` равно ``g(f(x))``. Без аргументов — тождество.
     """
-    def piped(value: Any) -> Any:
-        return reduce(lambda acc, func: func(acc), funcs, value)
-    return piped
+    raise NotImplementedError
 
 
 def _check_length(text: str, min_len: int, max_len: int | None) -> bool:
@@ -51,7 +47,7 @@ def make_validator(
 
     Используйте ``functools.partial`` от ``_check_length``.
     """
-    return partial(_check_length, min_len=min_len, max_len=max_len)
+    raise NotImplementedError
 
 
 class Logger:
@@ -67,9 +63,7 @@ class Logger:
 
     def log(self, message: str, *, level: str = "INFO") -> str:
         """Записать ``"{level}: {prefix} {message}"`` в ``messages`` и вернуть строку."""
-        line = f"{level}: {self.prefix} {message}"
-        self.messages.append(line)
-        return line
+        raise NotImplementedError
 
     warn = partialmethod(log, level="WARN")
     debug = partialmethod(log, level="DEBUG")

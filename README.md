@@ -4,8 +4,8 @@
 сложному с автопроверкой через `pytest`.
 
 Каждый набор — это подпакет в `src/pytutor/exercises/<модуль>/`. К упражнениям
-идут тесты в `tests/exercises/<модуль>/` и эталонные решения в
-`solutions/<модуль>/`.
+идут тесты в `tests/exercises/<модуль>/`, эталонные решения в `solutions/<модуль>/`
+и исходные заготовки в `stubs/<модуль>/`.
 
 ## Быстрый старт
 
@@ -36,11 +36,28 @@ PYTUTOR_SOLUTION=1 uv run pytest
 В этом режиме `tests/conftest.py` подменяет модули заданий реализациями из
 `solutions/`.
 
+## Сброс к исходному виду
+
+Чтобы вернуть все упражнения к заготовкам (затереть свои решения), есть скрипт:
+
+```bash
+uv run python scripts/reset_exercises.py              # все наборы
+uv run python scripts/reset_exercises.py -m functools # один набор
+uv run python scripts/reset_exercises.py -m functools -e ex04
+```
+
+Он просто копирует заготовки из `stubs/<модуль>/` поверх
+`src/pytutor/exercises/<модуль>/`. Скрипт идемпотентен — его можно запускать в
+любой момент, в том числе повторно. «Данные» (заранее реализованные в рамках
+упражнения) функции и классы сохранены в заготовках и не затираются.
+
 ## Структура
 
 ```
-src/pytutor/exercises/<module>/   # задания (заготовки) и README набора
+src/pytutor/exercises/<module>/   # задания (текущее состояние, вы их решаете)
+stubs/<module>/                   # исходные заготовки для сброса
 tests/exercises/<module>/         # автотесты
 solutions/<module>/               # эталонные решения
+scripts/reset_exercises.py        # сброс упражнений из stubs/
 tests/conftest.py                 # переключение «задание / эталон»
 ```

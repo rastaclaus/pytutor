@@ -24,20 +24,12 @@ def flatten(nested: Iterable[Iterable[int]]) -> list[int]:
 
     Порядок элементов сохраняется: ``[[1, 2], [3], []]`` -> ``[1, 2, 3]``.
     """
-    def extender(acc: list[int], ext: Iterable[int]) -> list[int]:
-        acc.extend(ext)
-        return acc
-
-    return functools.reduce(extender, nested, [])
+    raise NotImplementedError
 
 
 def count_items(items: Iterable[str]) -> dict[str, int]:
     """Посчитать, сколько раз встречается каждый элемент."""
-    def bump(acc: defaultdict[str, int], val: str) -> defaultdict[str, int]:
-        acc[val] += 1
-        return acc
-
-    return functools.reduce(bump, items, defaultdict(int))
+    raise NotImplementedError
 
 
 def most_common(items: Iterable[str]) -> str | None:
@@ -45,10 +37,7 @@ def most_common(items: Iterable[str]) -> str | None:
 
     При равенстве частот возвращается тот элемент, который встретился раньше.
     """
-    count = count_items(items)
-    if not count:
-        return None
-    return max(count, key=count.get)  # ty: ignore[no-matching-overload]
+    raise NotImplementedError
 
 
 def group_by(items: Iterable[T], key: Callable[[T], K]) -> dict[K, list[T]]:
@@ -56,8 +45,4 @@ def group_by(items: Iterable[T], key: Callable[[T], K]) -> dict[K, list[T]]:
 
     Порядок групп и элементов внутри группы — как при первом появлении.
     """
-    def group(res: dict[K, list[T]], item: T) -> dict[K, list[T]]:
-        key_value = key(item)
-        res.setdefault(key_value, []).append(item)
-        return  res
-    return functools.reduce(group, items, {})
+    raise NotImplementedError
