@@ -9,7 +9,6 @@
 from __future__ import annotations
 
 import functools
-from collections import defaultdict
 from typing import TYPE_CHECKING, TypeVar
 
 if TYPE_CHECKING:
@@ -24,12 +23,22 @@ def flatten(nested: Iterable[Iterable[int]]) -> list[int]:
 
     Порядок элементов сохраняется: ``[[1, 2], [3], []]`` -> ``[1, 2, 3]``.
     """
-    raise NotImplementedError
+    def _extract(acc: list[int], numbers: Iterable[int]) -> list[int]:
+        acc.extend(numbers)
+        return acc
+
+    return functools.reduce(_extract, nested, [])
 
 
 def count_items(items: Iterable[str]) -> dict[str, int]:
     """Посчитать, сколько раз встречается каждый элемент."""
-    raise NotImplementedError
+
+    def counter(acc: dict[str, int], item: str) -> dict[str, int]:
+        acc[item] = acc.setdefault(item, 0) + 1
+        return acc
+
+    return functools.reduce(counter, items, {})
+
 
 
 def most_common(items: Iterable[str]) -> str | None:
@@ -37,12 +46,18 @@ def most_common(items: Iterable[str]) -> str | None:
 
     При равенстве частот возвращается тот элемент, который встретился раньше.
     """
-    raise NotImplementedError
+    counts = count_items(items)
+    if not counts:
+        return None
+    return max(counts, key=counts.get)  # ty: ignore[no-matching-overload]
 
 
-def group_by(items: Iterable[T], key: Callable[[T], K]) -> dict[K, list[T]]:
+def group_by[K, T](items: Iterable[T], key: Callable[[T], K]) -> dict[K, list[T]]:
     """Сгруппировать элементы по значению ``key(item)``.
 
     Порядок групп и элементов внутри группы — как при первом появлении.
     """
-    raise NotImplementedError
+    def group_by(acc: dict[K, list[T]], item: T) -> dict[K, list[T]]:
+        acc.setdefault(key(item), []).append(item)
+        return acc
+    return functools.reduce(group_by, items, {})
