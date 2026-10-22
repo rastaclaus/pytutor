@@ -29,9 +29,7 @@ def repeat(times: int) -> Callable[[F], F]:
     raise NotImplementedError
 
 
-def retry(
-    times: int, exceptions: tuple[type[BaseException], ...] = (Exception,)
-) -> Callable[[F], F]:
+def retry(times: int, exceptions: tuple[type[BaseException], ...] = (Exception,)) -> Callable[[F], F]:
     """Вернуть декоратор с повторами при ошибках.
 
     Максимум ``times`` попыток (``times >= 1``). Если поймано исключение из

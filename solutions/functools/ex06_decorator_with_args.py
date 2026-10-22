@@ -20,9 +20,7 @@ def repeat(times: int) -> Callable[[F], F]:
     return decorator
 
 
-def retry(
-    times: int, exceptions: tuple[type[BaseException], ...] = (Exception,)
-) -> Callable[[F], F]:
+def retry(times: int, exceptions: tuple[type[BaseException], ...] = (Exception,)) -> Callable[[F], F]:
     if times < 1:
         raise ValueError("times должно быть >= 1")
 

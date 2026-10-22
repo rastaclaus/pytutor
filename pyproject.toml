@@ -1,7 +1,7 @@
 [project]
 name = "pytutor"
 version = "0.1.0"
-description = "Add your description here"
+description = "Тренажёр по модулям стандартной библиотеки Python с автопроверкой через pytest"
 readme = "README.md"
 authors = [{ name = "Artem Shestopalov", email = "tema.rastaclaus2016@yandex.ru" }]
 requires-python = ">=3.14"
@@ -22,4 +22,6 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
-addopts = "-q"
+# importlib-режим обязателен: тестовые файлы разных наборов называются одинаково
+# (tests/exercises/<модуль>/test_exNN_*.py), иначе pytest ругается на дубли имён.
+addopts = "-q --import-mode=importlib"

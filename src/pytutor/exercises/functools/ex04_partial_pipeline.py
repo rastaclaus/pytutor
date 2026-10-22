@@ -9,9 +9,11 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from functools import partial, partialmethod, reduce
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def compose(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
@@ -40,9 +42,7 @@ def _check_length(text: str, min_len: int, max_len: int | None) -> bool:
     return not (max_len is not None and len(text) > max_len)
 
 
-def make_validator(
-    min_len: int = 0, max_len: int | None = None
-) -> Callable[[str], bool]:
+def make_validator(min_len: int = 0, max_len: int | None = None) -> Callable[[str], bool]:
     """Вернуть валидатор строки с зафиксированными границами длины.
 
     Используйте ``functools.partial`` от ``_check_length``.
@@ -58,6 +58,7 @@ class Logger:
     """
 
     def __init__(self, prefix: str) -> None:
+        """Запомнить префикс и завести список записанных сообщений."""
         self.prefix = prefix
         self.messages: list[str] = []
 

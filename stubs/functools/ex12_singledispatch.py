@@ -24,6 +24,8 @@ from typing import NamedTuple
 
 
 class Point(NamedTuple):
+    """Точка на плоскости — пример для регистрации обработчика."""
+
     x: int
     y: int
 
@@ -32,6 +34,7 @@ class Point(NamedTuple):
 def describe(value: object) -> str:
     """Общая реализация (fallback) для неизвестных типов."""
     raise NotImplementedError
+
 
 # TODO: зарегистрируйте обработчики для int, str, list и Point, например:
 #   @describe.register

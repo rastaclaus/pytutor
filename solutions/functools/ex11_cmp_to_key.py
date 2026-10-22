@@ -18,10 +18,7 @@ def sort_by_absolute(values: list[int]) -> list[int]:
 def _natural_parts(text: str) -> list[object]:
     # Разбиваем на чередующиеся текстовые и числовые куски;
     # числовые куски сравниваем как числа.
-    return [
-        int(chunk) if chunk.isdigit() else chunk.lower()
-        for chunk in re.split(r"(\d+)", text)
-    ]
+    return [int(chunk) if chunk.isdigit() else chunk.lower() for chunk in re.split(r"(\d+)", text)]
 
 
 def compare_natural(a: str, b: str) -> int:

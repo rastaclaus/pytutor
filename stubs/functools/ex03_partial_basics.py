@@ -18,9 +18,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Iterable
 
 
-def format_currency(
-    value: float, currency: str = "₽", decimals: int = 2
-) -> str:
+def format_currency(value: float, currency: str = "₽", decimals: int = 2) -> str:
     """Отформатировать сумму: ``format_currency(3.5, "$", 1)`` -> ``"3.5 $"``."""
     return f"{value:.{decimals}f} {currency}"
 
@@ -50,5 +48,5 @@ def add_all(numbers: Iterable[int], amount: int) -> list[int]:
 
 
 def make_price_formatter(currency: str, decimals: int = 2) -> Callable[[float], str]:
-    """Вернуть функцию-форматтер цены с зафиксированными ``currency`` и ``decimals``."""  # noqa: RUF002
+    """Вернуть функцию-форматтер цены с зафиксированными ``currency`` и ``decimals``."""
     raise NotImplementedError

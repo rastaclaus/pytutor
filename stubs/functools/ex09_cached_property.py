@@ -15,6 +15,7 @@ class HeavyValue:
     """Хранит ``base`` и (лениво) его квадрат в ``value``."""
 
     def __init__(self, base: int) -> None:
+        """Запомнить ``base`` и обнулить счётчик вычислений."""
         self.base = base
         self.computations = 0
 

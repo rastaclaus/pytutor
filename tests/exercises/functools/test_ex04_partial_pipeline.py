@@ -54,7 +54,7 @@ def test_make_validator() -> None:
 def test_logger_levels() -> None:
     logger = ex.Logger("app")
     assert logger.log("started") == "INFO: app started"
-    assert logger.warn("careful") == "WARN: app careful"
+    assert logger.warn("careful") == "WARN: app careful"  # noqa: G010 — тестируем именно метод `warn`
     assert logger.debug("details") == "DEBUG: app details"
     assert logger.messages == [
         "INFO: app started",

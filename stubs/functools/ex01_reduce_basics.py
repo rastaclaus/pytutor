@@ -43,6 +43,7 @@ def sum_with_initial(initial: int, numbers: Iterable[int]) -> int:
     """
     raise NotImplementedError
 
+
 def max_or_none(numbers: Iterable[int]) -> int | None:
     """Вернуть максимум последовательности или ``None``, если она пуста.
 

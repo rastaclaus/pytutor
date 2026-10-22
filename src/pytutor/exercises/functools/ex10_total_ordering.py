@@ -17,6 +17,7 @@ class Version:
     """Версия, представленная кортежем чисел: ``Version(1, 2, 0)``."""
 
     def __init__(self, *parts: int) -> None:
+        """Сохранить числа версии как кортеж."""
         self.parts = tuple(parts)
 
     def __eq__(self, other: object) -> bool:

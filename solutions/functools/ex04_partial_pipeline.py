@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from functools import partial, partialmethod, reduce
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def compose(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
@@ -24,14 +26,10 @@ def pipeline(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
 def _check_length(text: str, min_len: int, max_len: int | None) -> bool:
     if len(text) < min_len:
         return False
-    if max_len is not None and len(text) > max_len:
-        return False
-    return True
+    return not (max_len is not None and len(text) > max_len)
 
 
-def make_validator(
-    min_len: int = 0, max_len: int | None = None
-) -> Callable[[str], bool]:
+def make_validator(min_len: int = 0, max_len: int | None = None) -> Callable[[str], bool]:
     return partial(_check_length, min_len=min_len, max_len=max_len)
 
 

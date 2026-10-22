@@ -41,4 +41,4 @@ def test_repr() -> None:
 
 def test_incomparable_type_raises() -> None:
     with pytest.raises(TypeError):
-        ex.Version(1) < 5
+        _ = ex.Version(1) < 5

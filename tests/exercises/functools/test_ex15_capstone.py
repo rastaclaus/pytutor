@@ -82,7 +82,10 @@ def test_end_to_end_pipeline() -> None:
         {"cat": "b", "raw": "5"},
         {"cat": "a", "raw": "7"},
     ]
-    parse = lambda row: {**row, "value": ex.parse_measurement(row["raw"])}
+
+    def parse(row: dict[str, str]) -> dict[str, object]:
+        return {**row, "value": ex.parse_measurement(row["raw"])}
+
     scale = functools.partial(ex.scale_value, scaler=ex.make_scaler(2, 1))
     process = ex.pipeline(parse, scale)
 

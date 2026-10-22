@@ -22,9 +22,7 @@ from typing import Any, TypeVar
 F = TypeVar("F", bound=Callable[..., Any])
 
 
-def retry(
-    times: int, exceptions: tuple[type[BaseException], ...] = (Exception,)
-) -> Callable[[F], F]:
+def retry(times: int, exceptions: tuple[type[BaseException], ...] = (Exception,)) -> Callable[[F], F]:
     """Декоратор: до ``times`` попыток при исключениях из ``exceptions``."""
     raise NotImplementedError
 

@@ -23,9 +23,11 @@ if TYPE_CHECKING:
 P = ParamSpec("P")
 R = TypeVar("R")
 
+
 def identity_decorator(func: Callable[..., Any]) -> Callable[..., Any]:
     """Обернуть ``func``, возвращая её результат, но не копируя метаданные."""
     raise NotImplementedError
+
 
 def preserving_decorator[**P, R](func: Callable[P, R]) -> Callable[P, R]:
     """Обернуть ``func``, сохранив метаданные через ``functools.wraps``."""
