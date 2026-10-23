@@ -52,6 +52,7 @@ uv run pytutor itertools    # файлы одного набора
 | `functools` | 15 | [src/pytutor/exercises/functools/README.md](src/pytutor/exercises/functools/README.md) |
 | `itertools` | 15 | [src/pytutor/exercises/itertools/README.md](src/pytutor/exercises/itertools/README.md) |
 | `collections` | 20 | [src/pytutor/exercises/collections/README.md](src/pytutor/exercises/collections/README.md) |
+| `dataclasses` | 20 | [src/pytutor/exercises/dataclasses/README.md](src/pytutor/exercises/dataclasses/README.md) |
 
 ## Проверка эталонов
 

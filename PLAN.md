@@ -1,4 +1,32 @@
-# План: набор упражнений по `itertools`
+# План тренажёра `pytutor`
+
+## План: набор `dataclasses` (сдан)
+
+Цель — 20 упражнений уровней 1–8 по `dataclasses`, формат как у предыдущих
+наборов: заготовка с условием в докстринге, тесты, эталон, сброс из `stubs/`.
+
+Принятые решения:
+
+- **Объём:** 20 упражнений — модуль богат опциями, есть материал на все уровни.
+- **Интеграция с `typing` не включается:** `Generic`/`TypeVar` остаются темой
+  отдельного набора.
+- **Капстоун — модель домена:** неизменяемые сущности, агрегат, `ClassVar`-журнал,
+  цепочка `replace`.
+- **Ориентир — документация Python 3.14** (`field(doc=)` появился в 3.14;
+  `slots`, `kw_only`, `KW_ONLY`, `weakref_slot` — 3.10/3.11). На поведение 3.15
+  (`frozendict` в `metadata`, `sentinel`) не опираемся.
+
+Состав: основы и генерация методов → дефолты и фабрики → `frozen` → `order` →
+`__post_init__` → `InitVar` → `ClassVar` → `slots` → `kw_only` → `replace` →
+`asdict`/`astuple` → наследование → `repr`/`compare`/`hash` → `fields()` и
+`metadata` → `make_dataclass` → вложенность → дескрипторы → альтернативные
+конструкторы → неизменяемое дерево → капстоун.
+
+Критерии готовности выполнены: `PYTUTOR_SOLUTION=1 uv run pytest` — 444 passed;
+`uv run pytest` падает только на `NotImplementedError`; `ruff check .` и
+`ruff format --check .` чистые; сброс из `stubs/` идемпотентен.
+
+## План: набор `itertools`
 
 Продолжение тренажёра `pytutor` после набора `functools`. Цель — 15 упражнений
 уровней 1–8 по `itertools` в том же формате: заготовка с условием в докстринге,
@@ -127,6 +155,12 @@ CI (GitHub Actions) — пока отложен; вернуться, когда 
 
 ## Сданные наборы
 
+- `dataclasses` — 20 упражнений (уровни 1–8): `@dataclass` и его опции
+  (`frozen`, `order`, `slots`, `kw_only`, `unsafe_hash`), `field()` с
+  `default_factory`/`repr`/`compare`/`metadata`, `__post_init__`, `InitVar`,
+  `ClassVar`, наследование, `replace`, `asdict`/`astuple`, `fields()`,
+  `make_dataclass`, поля-дескрипторы, альтернативные конструкторы,
+  неизменяемое дерево и капстоун по модели домена.
 - `itertools` — 15 упражнений (уровни 1–8).
 - `functools` — 15 упражнений (уровни 1–8).
 - `collections` — 20 упражнений (уровни 1–8): `Counter`, `deque`,
@@ -136,12 +170,11 @@ CI (GitHub Actions) — пока отложен; вернуться, когда 
 
 ## Дальше по очереди
 
-`dataclasses` → `typing` → `re` → `pathlib` → `contextlib`
+`typing` → `re` → `pathlib` → `contextlib`
 → `logging` / `unittest.mock` → `concurrent.futures`.
 
 Порядок — по убыванию практической пользы и объёму материала:
 
-- `dataclasses` — `field`, `frozen`, `__post_init__`; тесно связан с `typing`;
 - `typing` — дженерики, `TypeVar`, `Protocol`, `overload`; материал для верхних
   уровней;
 - `re` — объёмный и практичный;
