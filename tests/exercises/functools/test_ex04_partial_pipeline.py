@@ -1,4 +1,4 @@
-"""Тесты упражнения 4: ``compose``/``pipeline`` и ``partialmethod``."""
+"""Тесты упражнения 4: ``partial``, ``compose``/``pipeline`` и ``partialmethod``."""
 
 from __future__ import annotations
 
@@ -49,6 +49,19 @@ def test_make_validator() -> None:
     assert bounded("abcd") is True
     assert bounded("a") is False
     assert bounded("abcde") is False
+
+
+def test_make_trimmed_validator() -> None:
+    not_blank = ex.make_trimmed_validator(min_len=1)
+    assert not_blank("ok") is True
+    assert not_blank("  ok  ") is True
+    assert not_blank("   ") is False
+
+    bounded = ex.make_trimmed_validator(min_len=2, max_len=4)
+    assert bounded("  ab  ") is True
+    assert bounded("  abcd  ") is True
+    assert bounded("  a  ") is False
+    assert bounded("  abcde  ") is False
 
 
 def test_logger_levels() -> None:

@@ -45,7 +45,7 @@ PYTUTOR_SOLUTION=1 uv run pytest
 | 1 | `ex01_reduce_basics.py` | `reduce`: произведение, конкатенация, сумма с `initial` | 1 |
 | 2 | `ex02_reduce_aggregation.py` | `reduce`: flatten, частоты, самое частое, `group_by` | 2 |
 | 3 | `ex03_partial_basics.py` | `partial`: фиксация аргументов, `map` + `partial` | 2 |
-| 4 | `ex04_partial_pipeline.py` | `compose`/`pipeline` на `reduce` + `partial`, `partialmethod` | 3 |
+| 4 | `ex04_partial_pipeline.py` | сборка функций: `partial` как адаптер сигнатуры, `compose`/`pipeline` на `reduce`, `partialmethod` | 3 |
 | 5 | `ex05_wraps_identity.py` | зачем нужен `wraps`, `__wrapped__` | 3 |
 | 6 | `ex06_decorator_with_args.py` | декораторы с аргументами: `repeat`, `retry` | 4 |
 | 7 | `ex07_lru_cache_basics.py` | `lru_cache`/`cache`: Фибоначчи, Каталан | 4 |
