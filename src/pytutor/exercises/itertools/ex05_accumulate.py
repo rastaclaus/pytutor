@@ -11,12 +11,14 @@
 
 ``functools.reduce`` даёт только последний элемент — если нужен лишь итог,
 используйте именно его.
+
+Общее правило: при пустом входе ``accumulate`` без ``initial`` даёт ``[]``,
+а с ``initial`` — ``[initial]``.
 """
 
 from __future__ import annotations
 
 import operator
-from functools import reduce
 from itertools import accumulate
 from typing import TYPE_CHECKING
 
@@ -25,46 +27,88 @@ if TYPE_CHECKING:
 
 
 def running_sum(numbers: Iterable[int]) -> list[int]:
-    """Бегущая сумма: ``[1, 2, 3] -> [1, 3, 6]``."""
-    return list(accumulate(numbers, operator.add))
+    """Бегущая сумма: ``[1, 2, 3] -> [1, 3, 6]``.
+
+    ``running_sum([])`` -> ``[]``;
+    ``running_sum([5])`` -> ``[5]`` — один элемент даёт один результат.
+    """
+    raise NotImplementedError
 
 
 def running_sum_with_start(start: int, numbers: Iterable[int]) -> list[int]:
     """Бегущая сумма с начальным значением ``start``.
 
-    Для пустого входа результат — ``[start]``.
+    ``running_sum_with_start(10, [1, 2])`` -> ``[10, 11, 13]``;
+    ``running_sum_with_start(42, [])`` -> ``[42]`` — ``initial`` попадает в
+    результат даже для пустого входа;
+    ``running_sum_with_start(0, [1])`` -> ``[0, 1]`` — длина на единицу больше
+    длины входа.
+
+    Подсказка: ``accumulate(numbers, initial=start)``.
     """
-    return list(accumulate(numbers, operator.add, initial=start))
+    raise NotImplementedError
 
 
 def running_product(numbers: Iterable[int]) -> list[int]:
-    """Бегущее произведение."""
-    return list(accumulate(numbers, operator.mul))
+    """Бегущее произведение.
+
+    ``running_product([2, 3, 4])`` -> ``[2, 6, 24]``;
+    ``running_product([])`` -> ``[]``;
+    ``running_product([0, 5])`` -> ``[0, 0]`` — ноль обнуляет всё после себя.
+
+    Подсказка: ``accumulate(numbers, operator.mul)``.
+    """
+    raise NotImplementedError
 
 
 def running_max(numbers: Iterable[int]) -> list[int]:
-    """Бегущий максимум: ``[3, 1, 4] -> [3, 3, 4]``."""
-    return list(accumulate(numbers, max))
+    """Бегущий максимум: ``[3, 1, 4] -> [3, 3, 4]``.
+
+    ``running_max([3, 1, 4, 2])`` -> ``[3, 3, 4, 4]``;
+    ``running_max([])`` -> ``[]``;
+    ``running_max([-5, -1])`` -> ``[-5, -1]``.
+
+    Подсказка: ``accumulate(numbers, max)``.
+    """
+    raise NotImplementedError
 
 
 def running_balance(transactions: Iterable[int]) -> list[int]:
     """Баланс после каждой транзакции (стартовый баланс — 0).
 
+    ``running_balance([100, -30, -50])`` -> ``[0, 100, 70, 20]`` — нулевой
+    баланс идёт первым элементом результата;
+    ``running_balance([])`` -> ``[0]``;
+    ``running_balance([-10])`` -> ``[0, -10]`` — уходить в минус можно.
+
     Подсказка: ``initial=0`` добавляет нулевой баланс в начало.
     """
-    return list(accumulate(transactions, operator.add, initial=0))
+    raise NotImplementedError
 
 
 def final_sum(numbers: Iterable[int]) -> int:
-    """Только итоговая сумма (без истории), через ``functools.reduce``."""
-    return reduce(operator.add, numbers, 0)
+    """Только итоговая сумма (без истории), через ``functools.reduce``.
+
+    ``final_sum([1, 2, 3])`` -> ``6``;
+    ``final_sum([])`` -> ``0`` — нейтральный элемент передан как
+    ``initializer``.
+    """
+    raise NotImplementedError
 
 
 def running_pairwise_ratio(numbers: Iterable[int]) -> list[float]:
-    """Бегущее отношение ``acc / value`` для ненулевых значений.
+    """Бегущее отношение: первый элемент как есть, далее ``acc / value``.
 
-    Подсказка: подойдёт ``operator.truediv``, но первое значение
-    должно остаться как есть — проверьте, что даёт ``accumulate``
-    с такой функцией и ``initial``.
+    ``running_pairwise_ratio([100, 2, 5])`` -> ``[100.0, 50.0, 10.0]``:
+    ``100 / 2 = 50``, затем ``50 / 5 = 10``;
+    ``running_pairwise_ratio([7])`` -> ``[7]`` — делить не на что;
+    ``running_pairwise_ratio([])`` -> ``[]``.
+
+    То есть ``result[0] == numbers[0]``, а ``result[i] == result[i-1] /
+    numbers[i]`` для ``i >= 1``. Длина результата равна длине входа.
+
+    Подсказка: ``accumulate`` не умеет «первый без операции», поэтому
+    передайте первый элемент как ``initial`` и сверните только хвост:
+    ``accumulate(values[1:], operator.truediv, initial=values[0])``.
     """
-    return list(accumulate(numbers, operator.truediv))
+    raise NotImplementedError

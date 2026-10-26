@@ -48,20 +48,7 @@ def sliding_window(values: Iterable[int], size: int) -> list[tuple[int, ...]]:
     Подсказка: рецепт на ``deque(maxlen=size)``; первые ``size - 1`` элементов
     надо забрать заранее через ``islice``, иначе первое окно окажется неполным.
     """
-    if size <= 0:
-        msg = "size must be > 0"
-        raise ValueError(msg)
-    res: list[tuple[int, ...]] = []
-    if size < 0:
-        msg = "size must be >= 0"
-        raise ValueError(msg)
-
-    iterator = iter(values)
-    window = deque(islice(iterator, size - 1), maxlen=size)
-    for value in iterator:
-        window.append(value)
-        res.append(tuple(window))
-    return res
+    raise NotImplementedError
 
 
 def running_mean(values: Iterable[int]) -> list[float]:
@@ -73,10 +60,10 @@ def running_mean(values: Iterable[int]) -> list[float]:
     Подсказка: ``accumulate`` — бегущая сумма, ``count(1)`` — бегущий
     знаменатель, ``map(truediv, ...)`` делит одно на другое лениво.
     """
-    return list(map(truediv, accumulate(values), count(1)))
+    raise NotImplementedError
 
 
-def sum_of_squares(values: Iterable[int]) -> float:
+def sum_of_squares(values: Iterable[int]) -> int:
     """Сумма квадратов всех элементов, без промежуточного списка.
 
     ``sum_of_squares([1, 2, 3])`` -> ``14`` (1 + 4 + 9);
@@ -85,7 +72,7 @@ def sum_of_squares(values: Iterable[int]) -> float:
     Подсказка: ``sumprod(a, b)`` — скалярное произведение; две копии одного
     потока (``tee``) дают вектор, умноженный сам на себя.
     """
-    return sumprod(*tee(values, 2))
+    raise NotImplementedError
 
 
 def tail(values: Iterable[int], size: int) -> list[int]:
@@ -98,12 +85,7 @@ def tail(values: Iterable[int], size: int) -> list[int]:
     Вход целиком материализовать нельзя: решение должно работать и на
     бесконечном потоке. Подсказка: ``deque(values, maxlen=size)``.
     """
-    if size < 0:
-        msg = "size must be > 0"
-        raise ValueError(msg)
-    if size == 0:
-        return []
-    return list(deque(values, maxlen=size))
+    raise NotImplementedError
 
 
 def running_extremes(values: Iterable[int]) -> list[tuple[int, int]]:

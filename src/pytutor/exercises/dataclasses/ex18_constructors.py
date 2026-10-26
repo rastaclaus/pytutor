@@ -13,6 +13,10 @@
 
 Ошибки ввода: ``raise ValueError``/``KeyError`` — но лучше явная проверка и
 ``ValueError`` с внятным сообщением.
+
+Тексты ошибок: у ``from_dict`` при отсутствии ``value`` нужно ``ValueError``, в
+тексте которого есть ``value``; у ``from_text`` пустая (в том числе из одних
+пробелов) строка — просто ``ValueError``, текст не проверяется.
 """
 
 from __future__ import annotations
@@ -40,20 +44,61 @@ def declare_measurement() -> type:
       ``ValueError`` с текстом "value";
     * ``@classmethod from_text(cls, text)`` — разбирает строку вида ``"12.5 m"``
       или ``"12.5"``; пустая строка → ``ValueError``.
+
+    Поведение:
+
+    * ``from_text("12.5 cm")`` -> ``value == 12.5``, ``unit == "cm"``;
+    * ``from_text("7")`` -> ``value == 7.0``, ``unit == "m"`` (дефолт);
+    * ``from_text("   ")`` -> ``ValueError``;
+    * ``from_dict({"value": 3, "unit": "kg", "extra": 1})`` создаёт
+      ``value == 3.0``, ``unit == "kg"``, ``source == "unknown"``; лишний ключ
+      ``extra`` не мешает;
+    * ``from_dict({"unit": "kg"})`` -> ``ValueError`` с ``value`` в тексте.
+
+    Подсказка: ``value`` приводите к ``float`` (``7`` -> ``7.0``). Для строки
+    ``text.split()`` уже отбрасывает пробелы, поэтому ``"   ".split() == []``.
+
+    Обратите внимание: методы объявляются внутри класса, но возвращают объект
+    через ``cls(...)``, а не через ``Measurement(...)``.
     """
     raise NotImplementedError
 
 
 def parse_measurement(text: str) -> object:
-    """Разобрать строку через ``Measurement.from_text``."""
+    """Разобрать строку через ``Measurement.from_text``.
+
+    ``parse_measurement("12.5 cm").unit == "cm"``;
+    ``parse_measurement("7").value == 7.0``;
+    ``parse_measurement("   ")`` -> ``ValueError``.
+
+    Подсказка: ``declare_measurement().from_text(text)`` — методы у класса, а не
+    у экземпляра, но вызов через экземпляр тоже работает.
+    """
     raise NotImplementedError
 
 
 def parse_measurement_dict(data: Mapping[str, Any]) -> object:
-    """Создать через ``Measurement.from_dict``."""
+    """Создать через ``Measurement.from_dict``.
+
+    ``parse_measurement_dict({"value": 1, "source": "sensor"})`` даёт
+    ``source == "sensor"`` и ``unit == "m"``;
+    ``parse_measurement_dict({"unit": "kg"})`` -> ``ValueError`` (в тексте есть
+    ``value``).
+
+    Подсказка: ``declare_measurement().from_dict(data)``.
+    """
     raise NotImplementedError
 
 
 def serialize(measurement: object) -> dict:  # type: ignore[type-arg]
-    """Вернуть словарь с ключами ``value``, ``unit``, ``source``."""
+    """Вернуть словарь с ключами ``value``, ``unit``, ``source``.
+
+    ``serialize(parse_measurement_dict({"value": 1, "source": "sensor"}))`` ->
+    ``{"value": 1.0, "unit": "m", "source": "sensor"}`` — ровно три ключа, без
+    лишних.
+
+    Подсказка: не используйте ``dataclasses.asdict`` «на всякий случай» —
+    здесь нужен явный словарь из трёх полей; порядок ключей в сравнении не
+    важен, но лишний ключ сломает тест.
+    """
     raise NotImplementedError

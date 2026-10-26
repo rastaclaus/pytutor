@@ -15,6 +15,10 @@
 
 Тот же приём с ``chain.from_iterable`` позволяет «переформовать» плоский поток
 в строки матрицы: ``reshape``.
+
+Тексты ошибок принадлежат stdlib, и переупаковывать их не нужно:
+``batched(..., 0)`` даёт сообщение со словами ``at least one``, а
+``strict=True`` — ``incomplete batch``.
 """
 
 from __future__ import annotations
@@ -29,58 +33,85 @@ if TYPE_CHECKING:
 def batch(items: Iterable[str], size: int) -> list[tuple[str, ...]]:
     """Нарезать поток на батчи, оставив короткий хвост.
 
-    Для ``size < 1`` — ``ValueError``.
+    ``batch("ABCDEFG", 3)`` -> ``[("A","B","C"), ("D","E","F"), ("G",)]``;
+    ``batch("", 3)`` -> ``[]``;
+    ``batch("AB", 3)`` -> ``[("A", "B")]`` — неполный единственный батч
+    остаётся как есть;
+    ``batch("AB", 0)`` -> ``ValueError`` (в сообщении есть ``at least one``).
+
+    Для ``size < 1`` ничего не проверяйте вручную — ошибку даёт сам ``batched``.
+
+    Подсказка: ``list(batched(items, size))``.
     """
-    if size < 1:
-        msg="at least one"
-        raise ValueError(msg)
-    return list(batched(items, size, strict=False))
+    raise NotImplementedError
 
 
 def batch_strict(items: Iterable[str], size: int) -> list[tuple[str, ...]]:
-    """Нарезать поток, упав с ``ValueError``, если хвост неполный."""
-    if size < 1:
-        msg="size must be >= 1"
-        raise ValueError(msg)
-    return list(batched(items, size, strict=True))
+    """Нарезать поток, упав с ``ValueError``, если хвост неполный.
 
+    ``batch_strict("ABCDEF", 3)`` -> ``[("A","B","C"), ("D","E","F")]``;
+    ``batch_strict("ABCDEFG", 3)`` -> ``ValueError`` (в сообщении есть
+    ``incomplete batch``);
+    ``batch_strict("", 3)`` -> ``[]`` — пустой вход не даёт хвоста.
+
+    Подсказка: ``batched(items, size, strict=True)``.
+    """
+    raise NotImplementedError
 
 
 def batch_lengths(items: Iterable[str], size: int) -> list[int]:
     """Длины получившихся батчей.
 
-    ``batch_lengths("ABCDEFG", 3)`` даёт ``[3, 3, 1]``.
+    ``batch_lengths("ABCDEFG", 3)`` -> ``[3, 3, 1]``;
+    ``batch_lengths("", 3)`` -> ``[]``;
+    ``batch_lengths("AB", 3)`` -> ``[2]``.
+
+    Подсказка: переиспользуйте ``batch`` и возьмите ``len`` от каждого батча.
     """
-    if size < 1:
-        msg="at least one"
-        raise ValueError(msg)
-    return [len(batch) for batch in batched(items, size, strict=False)]
+    raise NotImplementedError
 
 
 def pad_batches(items: Iterable[str], size: int, fill: str) -> list[tuple[str, ...]]:
-    """Нарезать поток, дополнив хвост значением ``fill`` (рецепт ``grouper``)."""
-    return list(zip_longest(*[iter(items)]*size, fillvalue=fill))
+    """Нарезать поток, дополнив хвост значением ``fill`` (рецепт ``grouper``).
+
+    ``pad_batches("ABCDEFG", 3, "-")`` -> ``[("A","B","C"), ("D","E","F"),
+    ("G","-","-")]``;
+    ``pad_batches("", 3, "-")`` -> ``[]``;
+    ``pad_batches("AB", 3, "-")`` -> ``[("A", "B", "-")]``;
+    ``pad_batches("AB", 0, "-")`` -> ``ValueError`` (в сообщении есть ``size``).
+
+    Подсказка: ``zip_longest(*[iter(items)] * size, fillvalue=fill)``. Для
+    ``size < 1`` бросьте ``ValueError`` сами: иначе ``*[]`` даст пустой ``zip``
+    и молчаливый ``[]``.
+    """
+    raise NotImplementedError
 
 
-def trim_batches(items: Iterable[str | int], size: int) -> list[tuple[str | int, ...]]:
-    """Нарезать поток, отбросив неполный хвост."""
-    if size < 1:
-        msg = "size должно быть >= 1"
-        raise ValueError(msg)
+def trim_batches(items: Iterable[str], size: int) -> list[tuple[str, ...]]:
+    """Нарезать поток, отбросив неполный хвост.
 
-    return list(zip(*[iter(items)]*size, strict=False))
+    ``trim_batches("ABCDEFG", 3)`` -> ``[("A","B","C"), ("D","E","F")]``;
+    ``trim_batches("AB", 3)`` -> ``[]`` — полных батчей нет;
+    ``trim_batches("", 3)`` -> ``[]``;
+    ``trim_batches("AB", 0)`` -> ``ValueError`` (в сообщении есть ``size``).
+
+    Подсказка: ``zip(*[iter(items)] * size)`` — короткий ``zip`` сам отбросит
+    хвост; добавьте проверку ``size < 1``, иначе результат молча пустой.
+    """
+    raise NotImplementedError
 
 
 def reshape(rows: Iterable[Iterable[int]], columns: int) -> list[tuple[int, ...]]:
     """Переформовать поток значений в строки по ``columns`` элементов.
 
-    ``reshape([[0, 1], [2, 3], [4, 5]], 3)`` даёт ``[(0, 1, 2), (3, 4, 5)]``.
-    Хвост, не заполнивший строку, отбрасывается.
+    ``reshape([[0, 1], [2, 3], [4, 5]], 3)`` -> ``[(0, 1, 2), (3, 4, 5)]`` —
+    границы строк не важны, важен общий плоский поток;
+    ``reshape([[0, 1], [2, 3]], 3)`` -> ``[(0, 1, 2)]`` — хвост отброшен;
+    ``reshape([[0], [1]], 3)`` -> ``[]``;
+    ``reshape([], 3)`` -> ``[]``;
+    ``reshape([[0]], 0)`` -> ``ValueError`` (в сообщении есть ``columns``).
+
+    Подсказка: ``zip(*[iter(chain.from_iterable(rows))] * columns)`` — тот же
+    приём, что и в ``trim_batches``, но вход сначала выпрямляется на уровень.
     """
-    if columns < 1:
-        msg = "columns должно быть >= 1"
-        raise ValueError(msg)
-    flat = chain.from_iterable(rows)
-    return list(zip(*[iter(flat)]*columns, strict=False))
-
-
+    raise NotImplementedError
