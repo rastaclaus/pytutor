@@ -11,7 +11,7 @@ def test_fifo_cache_evicts_oldest_inserted() -> None:
     cache = ex.FIFOCache(2)
     cache.put("a", 1)
     cache.put("b", 2)
-    assert cache.get("a") == 1  # то не освежает порядок
+    assert cache.get("a") == 1  # get не освежает порядок
     cache.put("c", 3)
     assert cache.get("a") is None  # вытеснен "a" — старейший по вставке
     assert cache.get("b") == 2
@@ -50,9 +50,8 @@ def test_lfu_cache_evicts_least_frequently_used() -> None:
 
 
 def test_caches_reject_bad_capacity() -> None:
-    with pytest.raises(ValueError, match="capacity"):
-        ex.FIFOCache(0)
-    with pytest.raises(ValueError, match="capacity"):
-        ex.LRUCache(0)
-    with pytest.raises(ValueError, match="capacity"):
-        ex.LFUCache(0)
+    for cache_cls in (ex.FIFOCache, ex.LRUCache, ex.LFUCache):
+        with pytest.raises(ValueError, match="capacity"):
+            cache_cls(0)
+        with pytest.raises(ValueError, match="capacity"):
+            cache_cls(-1)

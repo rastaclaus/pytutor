@@ -22,17 +22,17 @@ if TYPE_CHECKING:
 
 def merge_uneven(left: Iterable[str], right: Iterable[int]) -> list[tuple[str, int | None]]:
     """Слить неравные потоки, подставляя ``None`` вместо пропусков."""
-    raise NotImplementedError
+    return list(zip_longest(left, right))
 
 
-def merge_with_fill(left: Iterable[str], right: Iterable[int], fill: int) -> list[tuple[str, int]]:
+def merge_with_fill(left: Iterable[str], right: Iterable[int], fill: int) -> list[tuple[str | int, int]]:
     """Слить неравные потоки, подставляя ``fill`` вместо пропусков."""
-    raise NotImplementedError
+    return list(zip_longest(left, right, fillvalue=fill))
 
 
 def zip_strict(left: Iterable[int], right: Iterable[int]) -> list[tuple[int, int]]:
     """Слить потоки, упав с ``ValueError`` при разной длине."""
-    raise NotImplementedError
+    return list(zip(left, right, strict=True))
 
 
 def same_length(left: Iterable[int], right: Iterable[int]) -> bool:
@@ -40,7 +40,9 @@ def same_length(left: Iterable[int], right: Iterable[int]) -> bool:
 
     Подсказка: ``zip_strict`` + ``try/except``; результат ``zip`` не нужен.
     """
-    raise NotImplementedError
+    _ = zip_strict(left, right)
+    return True
+
 
 
 def grouper(items: Iterable[str], size: int) -> list[tuple[str, ...]]:
@@ -48,7 +50,14 @@ def grouper(items: Iterable[str], size: int) -> list[tuple[str, ...]]:
 
     ``grouper("ABCDEFG", 3)`` даёт ``("A","B","C"), ("D","E","F"), ("G","","")``.
     """
-    raise NotImplementedError
+    if size < 1:
+        msg = "size must be > 1"
+        raise ValueError(msg)
+
+    iterators = [iter(items)] * size
+    return list(zip_longest(*iterators, fillvalue=""))
+
+
 
 
 def transpose(matrix: list[list[int]]) -> list[tuple[int, ...]]:
@@ -56,4 +65,4 @@ def transpose(matrix: list[list[int]]) -> list[tuple[int, ...]]:
 
     Подсказка: ``zip(*matrix, strict=True)``; для пустой матрицы — ``[]``.
     """
-    raise NotImplementedError
+    return list(zip(*matrix, strict=True))

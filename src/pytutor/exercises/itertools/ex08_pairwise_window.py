@@ -24,12 +24,12 @@ if TYPE_CHECKING:
 
 def adjacent_pairs(values: Iterable[str]) -> list[tuple[str, str]]:
     """Все соседние пары подряд."""
-    raise NotImplementedError
+    return list(pairwise(values))
 
 
 def differences(values: Iterable[int]) -> list[int]:
     """Разности соседних элементов: ``[1, 4, 9] -> [3, 5]``."""
-    raise NotImplementedError
+    return [b - a for (a, b) in pairwise(values)]
 
 
 def all_increasing(values: Iterable[int]) -> bool:
@@ -37,7 +37,7 @@ def all_increasing(values: Iterable[int]) -> bool:
 
     Для последовательностей длиной 0 и 1 — ``True``.
     """
-    raise NotImplementedError
+    return all(b > a for a, b in pairwise(values))
 
 
 def sliding_window(values: Iterable[int], size: int) -> list[tuple[int, ...]]:
@@ -46,7 +46,20 @@ def sliding_window(values: Iterable[int], size: int) -> list[tuple[int, ...]]:
     ``sliding_window("ABCDEFG", 3)`` даёт ``ABC BCD CDE DEF EFG``. Для ``size <= 0``
     — ``ValueError``; если элементов меньше ``size`` — пустой список.
     """
-    raise NotImplementedError
+    if size <= 0:
+        msg = "size must be > 0"
+        raise ValueError(msg)
+    iterator = iter(values)
+    window = deque(islice(iterator, size), maxlen=size)
+    result = [tuple(window)]
+    if len(window) < size:
+        return []
+    for value in iterator:
+        window.append(value)
+        result.append(tuple(window))
+    return result
+
+
 
 
 def tail(values: Iterable[int], size: int) -> list[int]:
@@ -54,7 +67,10 @@ def tail(values: Iterable[int], size: int) -> list[int]:
 
     Подсказка: ``deque(values, maxlen=size)``; для ``size <= 0`` — пустой список.
     """
-    raise NotImplementedError
+    if size <= 0:
+        return []
+    return list(deque(values, maxlen=size))
+
 
 
 def window_sums(values: Iterable[int], size: int) -> list[int]:
@@ -62,12 +78,12 @@ def window_sums(values: Iterable[int], size: int) -> list[int]:
 
     Подсказка: переиспользуйте ``sliding_window``.
     """
-    raise NotImplementedError
+    return [sum(window) for window in sliding_window(values, size)]
 
 
 def pairwise_iter(values: Iterable[int]) -> Iterator[tuple[int, int]]:
     """Вернуть именно итератор пар, не список."""
-    raise NotImplementedError
+    return pairwise(values)
 
 
 def first_window_above(values: Iterable[int], size: int, limit: int) -> tuple[int, ...] | None:
@@ -75,4 +91,5 @@ def first_window_above(values: Iterable[int], size: int, limit: int) -> tuple[in
 
     Подсказка: ``next`` по генератору, ``default=None``.
     """
-    raise NotImplementedError
+    return next((window for window in sliding_window(values, size) if sum(window) > limit), None)
+

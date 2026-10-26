@@ -47,6 +47,8 @@ def test_add_child_returns_new_node() -> None:
     assert grown is not tree
     assert tree.children == ()
     assert [child.name for child in grown.children] == ["x"]
+    # Новый потомок связан обратной ссылкой именно с новым узлом.
+    assert grown.children[0].parent is grown
 
 
 def test_nodes_are_hashable() -> None:

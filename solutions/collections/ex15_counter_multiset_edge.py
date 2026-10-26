@@ -28,4 +28,4 @@ def symmetric_difference(left: Counter[str], right: Counter[str]) -> Counter[str
 
 
 def normalize(counter: Counter[str]) -> Counter[str]:
-    return Counter({key: count for key, count in counter.items() if count > 0})
+    return Counter({key: count for key, count in sorted(counter.items()) if count > 0})

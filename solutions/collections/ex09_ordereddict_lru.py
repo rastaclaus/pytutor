@@ -34,6 +34,8 @@ class LRUCache:
 
 
 def fifo_cache(items: Iterable[tuple[str, int]], capacity: int) -> list[tuple[str, int]]:
+    if capacity < 1:
+        raise ValueError("capacity должно быть >= 1")
     cache: OrderedDict[str, int] = OrderedDict()
     evicted: list[tuple[str, int]] = []
     for key, value in items:

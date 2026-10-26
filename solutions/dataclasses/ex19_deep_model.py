@@ -27,7 +27,9 @@ def declare_node() -> type:
                 yield from child.walk()
 
         def with_child(self, child: Self) -> Self:
-            return type(self)(name=self.name, children=(*self.children, child), parent=self.parent)
+            grown = type(self)(name=self.name, children=(*self.children, child), parent=self.parent)
+            object.__setattr__(child, "parent", grown)
+            return grown
 
         def depth(self) -> int:
             if not self.children:

@@ -16,8 +16,9 @@
 """
 
 from __future__ import annotations
+import math
 
-from itertools import combinations, combinations_with_replacement, permutations, product
+from itertools import chain, combinations, combinations_with_replacement, permutations, product
 from math import comb, perm
 from typing import TYPE_CHECKING
 
@@ -27,37 +28,42 @@ if TYPE_CHECKING:
 
 def all_pairs(values: Iterable[str]) -> list[tuple[str, str]]:
     """Все упорядоченные пары, включая повторы: ``AA AB BA BB``."""
-    raise NotImplementedError
+    return list(product(values, values))
 
 
 def permutations_of(values: Iterable[str], r: int) -> list[tuple[str, ...]]:
     """Все размещения длины ``r``."""
-    raise NotImplementedError
+    return list(permutations(values, r))
 
 
 def combinations_of(values: Iterable[str], r: int) -> list[tuple[str, ...]]:
     """Все сочетания длины ``r``."""
-    raise NotImplementedError
+    return list(combinations(values, r))
 
 
 def combinations_with_repeats(values: Iterable[str], r: int) -> list[tuple[str, ...]]:
     """Все сочетания длины ``r`` с повторами."""
-    raise NotImplementedError
+    return list(combinations_with_replacement(values, r))
 
 
 def powerset(values: Iterable[str]) -> list[tuple[str, ...]]:
     """Все подмножества, от пустого до полного, по возрастанию длины."""
-    raise NotImplementedError
+    res = []
+    length = len(list(values))
+    for i in range(length+1):
+        res.extend(list(combinations(values, i)))
+    return res
+
 
 
 def count_permutations(n: int, r: int) -> int:
     """Сколько элементов вернёт ``permutations(range(n), r)``."""
-    raise NotImplementedError
+    return math.perm(n, r)
 
 
 def count_combinations(n: int, r: int) -> int:
     """Сколько элементов вернёт ``combinations(range(n), r)``."""
-    raise NotImplementedError
+    return math.comb(n, r)
 
 
 def dice_sums(sides: int = 6, dice: int = 2) -> dict[int, int]:
@@ -66,4 +72,9 @@ def dice_sums(sides: int = 6, dice: int = 2) -> dict[int, int]:
     Вернуть словарь ``сумма -> количество комбинаций``, отсортированный по сумме.
     Подсказка: ``product(range(1, sides + 1), repeat=dice)``.
     """
-    raise NotImplementedError
+    totals: dict[int, int] = {}
+    for roll in product(range(1, sides+1), repeat=dice):
+        total = sum(roll)
+        totals[total] =  totals.get(total, 0) + 1
+    return dict(sorted(totals.items()))
+

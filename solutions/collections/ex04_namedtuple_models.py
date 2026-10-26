@@ -28,7 +28,7 @@ def as_serializable(point: Point) -> dict[str, int]:
     return point._asdict()
 
 
-def make_students(records: Iterable[tuple[str, str, list[int]]]) -> list[Student]:
+def make_students(records: Iterable[tuple[str, int, list[int]]]) -> list[Student]:
     return [Student(name, group, grades) for name, group, grades in records]
 
 

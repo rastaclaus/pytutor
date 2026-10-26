@@ -50,6 +50,11 @@ def test_fifo_cache() -> None:
     assert ex.fifo_cache(items, 2) == [("a", 1), ("b", 2)]
 
 
+def test_fifo_cache_rejects_bad_capacity() -> None:
+    with pytest.raises(ValueError, match="capacity"):
+        ex.fifo_cache([], 0)
+
+
 def test_touch() -> None:
     cache = OrderedDict([("a", 1), ("b", 2), ("c", 3)])
     result = ex.touch(cache, "a")

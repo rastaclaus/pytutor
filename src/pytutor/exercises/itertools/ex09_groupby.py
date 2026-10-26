@@ -29,7 +29,7 @@ def runs(values: Iterable[str]) -> list[tuple[str, int]]:
 
     ``"AAABBC"`` даёт ``[("A", 3), ("B", 2), ("C", 1)]``.
     """
-    raise NotImplementedError
+    return [(key, len(list(group))) for (key, group) in groupby(values)]
 
 
 def groups_as_lists(
@@ -39,7 +39,7 @@ def groups_as_lists(
 
     ``key`` — функция или ``None`` (тогда ключ — сам элемент).
     """
-    raise NotImplementedError
+    return [(key, list(group)) for (key, group) in groupby(values, key=key)]
 
 
 def unique_justseen(values: Iterable[str]) -> list[str]:
@@ -47,7 +47,7 @@ def unique_justseen(values: Iterable[str]) -> list[str]:
 
     ``"AAABBCA"`` даёт ``["A", "B", "C", "A"]``.
     """
-    raise NotImplementedError
+    return [key for key, _ in groupby(values)]
 
 
 def group_by_parity(values: Iterable[int]) -> dict[str, list[int]]:
@@ -55,7 +55,10 @@ def group_by_parity(values: Iterable[int]) -> dict[str, list[int]]:
 
     Здесь ``groupby`` недостаточно: сначала отсортируйте по ключу.
     """
-    raise NotImplementedError
+    prepared = sorted(values, key=lambda x: x % 2 == 0)
+    return {
+        key: list(values) for (key, values) in groupby(prepared, key=lambda x: "чётные" if x % 2 == 0 else "нечётные")
+    }
 
 
 def longest_run(values: Iterable[str]) -> tuple[str, int] | None:
@@ -63,9 +66,13 @@ def longest_run(values: Iterable[str]) -> tuple[str, int] | None:
 
     При равной длине побеждает первая встреченная. Для пустого входа — ``None``.
     """
-    raise NotImplementedError
+    lengths = [(key, len(list(group))) for (key, group) in groupby(values)]
+    if not lengths:
+        return None
+    return max(lengths, key=lambda x: x[1])
 
 
 def group_words_by_length(words: Iterable[str]) -> dict[int, list[str]]:
     """Сгруппировать слова по длине (порядок слов внутри группы сохранить)."""
-    raise NotImplementedError
+    sorted_words = sorted(words, key=len)
+    return {length: list(group) for (length, group) in groupby(sorted_words, key=len)}

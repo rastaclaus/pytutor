@@ -17,6 +17,23 @@ def test_moving_average() -> None:
 def test_moving_average_rejects_non_positive_size() -> None:
     with pytest.raises(ValueError, match="size"):
         list(ex.moving_average([1], 0))
+    with pytest.raises(ValueError, match="size"):
+        list(ex.moving_average([1], -1))
+
+
+def test_moving_max_rejects_non_positive_size() -> None:
+    with pytest.raises(ValueError, match="size"):
+        list(ex.moving_max([1], 0))
+
+
+def test_moving_min_rejects_non_positive_size() -> None:
+    with pytest.raises(ValueError, match="size"):
+        list(ex.moving_min([1], -2))
+
+
+def test_deviation_from_mean_rejects_non_positive_size() -> None:
+    with pytest.raises(ValueError, match="size"):
+        list(ex.deviation_from_mean([1], 0))
 
 
 def test_moving_max() -> None:

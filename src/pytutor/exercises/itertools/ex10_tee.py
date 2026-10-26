@@ -13,8 +13,9 @@
 """
 
 from __future__ import annotations
+from collections import deque
 
-from itertools import tee
+from itertools import filterfalse, tee, pairwise, zip_longest
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -23,7 +24,8 @@ if TYPE_CHECKING:
 
 def duplicate(values: Iterable[int]) -> tuple[list[int], list[int]]:
     """Вернуть две независимые копии потока в виде списков."""
-    raise NotImplementedError
+    iter1, iter2 = tee(values, 2)
+    return list(iter1), list(iter2)
 
 
 def peek(values: Iterable[str]) -> tuple[str | None, list[str]]:
@@ -31,7 +33,12 @@ def peek(values: Iterable[str]) -> tuple[str | None, list[str]]:
 
     Для пустого входа — ``(None, [])``.
     """
-    raise NotImplementedError
+    (peeker,) = tee(values, 1)
+    try:
+        return next(peeker), list(values)
+    except StopIteration:
+        return None, []
+
 
 
 def split_by_predicate(values: Iterable[int], predicate: Callable[[int], bool]) -> tuple[list[int], list[int]]:
@@ -39,7 +46,8 @@ def split_by_predicate(values: Iterable[int], predicate: Callable[[int], bool]) 
 
     Подсказка: ``tee`` + два ``filter``/``filterfalse`` по копиям.
     """
-    raise NotImplementedError
+    iter1, iter2 = tee(values, 2)
+    return list(filter(predicate, iter1)), list(filterfalse(predicate, iter2))
 
 
 def count_calls_once(values: Iterable[int]) -> tuple[int, int]:
@@ -47,7 +55,8 @@ def count_calls_once(values: Iterable[int]) -> tuple[int, int]:
 
     Вернуть ``(сумма, количество)``.
     """
-    raise NotImplementedError
+    iter1, iter2 = tee(values, 2)
+    return sum(iter1), sum(1 for _ in iter2)
 
 
 def first_and_last(values: Iterable[int]) -> tuple[int, int] | None:
@@ -56,7 +65,11 @@ def first_and_last(values: Iterable[int]) -> tuple[int, int] | None:
     Вход может быть генератором — материализовать его целиком нельзя.
     Подсказка: одна копия — на первый элемент, вторая — на «хвост».
     """
-    raise NotImplementedError
+    iter1, iter2 = tee(values, 2)
+    try:
+        return next(iter1), deque(iter2, 1).pop()
+    except StopIteration:
+        return  None
 
 
 def lookahead_pairs(values: Iterable[int]) -> list[tuple[int, int | None]]:
@@ -65,4 +78,7 @@ def lookahead_pairs(values: Iterable[int]) -> list[tuple[int, int | None]]:
     ``[1, 2, 3]`` даёт ``[(1, 2), (2, 3), (3, None)]``: классическая задача,
     которую ``pairwise`` не решает.
     """
-    raise NotImplementedError
+    iter1, iter2 = tee(values, 2)
+    next(iter2, None)
+    return [(value, next(iter2, None)) for value in iter1]
+

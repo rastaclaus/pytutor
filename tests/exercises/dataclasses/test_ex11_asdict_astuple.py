@@ -17,13 +17,23 @@ def test_asdict_nested() -> None:
         "start": {"x": 0, "y": 0},
         "end": {"x": 3, "y": 4},
         "weight": 2.5,
+        "labels": [],
     }
 
 
 def test_astuple_nested() -> None:
     point_cls, segment_cls = ex.declare_models()
     segment = segment_cls(point_cls(0, 0), point_cls(3, 4), 2.5)
-    assert ex.to_tuple(segment) == ((0, 0), (3, 4), 2.5)
+    assert ex.to_tuple(segment) == ((0, 0), (3, 4), 2.5, [])
+
+
+def test_default_factory_is_not_shared() -> None:
+    point_cls, segment_cls = ex.declare_models()
+    first = segment_cls(point_cls(0, 0), point_cls(1, 1))
+    second = segment_cls(point_cls(0, 0), point_cls(1, 1))
+    assert first.labels is not second.labels
+    first.labels.append("x")
+    assert second.labels == []
 
 
 def test_asdict_is_deep_copy() -> None:

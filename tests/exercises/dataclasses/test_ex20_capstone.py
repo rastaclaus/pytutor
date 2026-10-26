@@ -74,6 +74,12 @@ def test_history_is_a_copy() -> None:
     assert ex.history() == ["T1:new"]
 
 
+def test_reset_history_clears_journal() -> None:
+    ex.new_ticket("T1", "x")
+    ex.reset_history()
+    assert ex.history() == []
+
+
 def test_project_report() -> None:
     project = ex.demo_project()
     report = ex.project_report(project)

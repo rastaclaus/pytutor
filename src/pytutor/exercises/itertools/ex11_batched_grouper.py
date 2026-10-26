@@ -31,12 +31,19 @@ def batch(items: Iterable[str], size: int) -> list[tuple[str, ...]]:
 
     Для ``size < 1`` — ``ValueError``.
     """
-    raise NotImplementedError
+    if size < 1:
+        msg="at least one"
+        raise ValueError(msg)
+    return list(batched(items, size, strict=False))
 
 
 def batch_strict(items: Iterable[str], size: int) -> list[tuple[str, ...]]:
     """Нарезать поток, упав с ``ValueError``, если хвост неполный."""
-    raise NotImplementedError
+    if size < 1:
+        msg="size must be >= 1"
+        raise ValueError(msg)
+    return list(batched(items, size, strict=True))
+
 
 
 def batch_lengths(items: Iterable[str], size: int) -> list[int]:
@@ -44,17 +51,24 @@ def batch_lengths(items: Iterable[str], size: int) -> list[int]:
 
     ``batch_lengths("ABCDEFG", 3)`` даёт ``[3, 3, 1]``.
     """
-    raise NotImplementedError
+    if size < 1:
+        msg="at least one"
+        raise ValueError(msg)
+    return [len(batch) for batch in batched(items, size, strict=False)]
 
 
 def pad_batches(items: Iterable[str], size: int, fill: str) -> list[tuple[str, ...]]:
     """Нарезать поток, дополнив хвост значением ``fill`` (рецепт ``grouper``)."""
-    raise NotImplementedError
+    return list(zip_longest(*[iter(items)]*size, fillvalue=fill))
 
 
-def trim_batches(items: Iterable[str], size: int) -> list[tuple[str, ...]]:
+def trim_batches(items: Iterable[str | int], size: int) -> list[tuple[str | int, ...]]:
     """Нарезать поток, отбросив неполный хвост."""
-    raise NotImplementedError
+    if size < 1:
+        msg = "size должно быть >= 1"
+        raise ValueError(msg)
+
+    return list(zip(*[iter(items)]*size, strict=False))
 
 
 def reshape(rows: Iterable[Iterable[int]], columns: int) -> list[tuple[int, ...]]:
@@ -63,4 +77,10 @@ def reshape(rows: Iterable[Iterable[int]], columns: int) -> list[tuple[int, ...]
     ``reshape([[0, 1], [2, 3], [4, 5]], 3)`` даёт ``[(0, 1, 2), (3, 4, 5)]``.
     Хвост, не заполнивший строку, отбрасывается.
     """
-    raise NotImplementedError
+    if columns < 1:
+        msg = "columns должно быть >= 1"
+        raise ValueError(msg)
+    flat = chain.from_iterable(rows)
+    return list(zip(*[iter(flat)]*columns, strict=False))
+
+

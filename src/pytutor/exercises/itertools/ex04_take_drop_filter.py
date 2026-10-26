@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 
 def take_until_negative(values: Iterable[int]) -> list[int]:
     """Взять значения до первого отрицательного (само отрицательное не брать)."""
-    raise NotImplementedError
+    return list(takewhile(lambda x: x >= 0, values))
 
 
 def skip_leading_zeros(values: Iterable[int]) -> list[int]:
@@ -33,22 +33,22 @@ def skip_leading_zeros(values: Iterable[int]) -> list[int]:
 
     ``[0, 0, 1, 0, 2]`` даёт ``[1, 0, 2]``. Для ``[0, 0]`` — пустой список.
     """
-    raise NotImplementedError
+    return list(dropwhile(lambda x: x == 0, values))
 
 
 def odd_numbers(values: Iterable[int]) -> list[int]:
     """Оставить нечётные числа, используя ``filterfalse``."""
-    raise NotImplementedError
+    return list(filterfalse(lambda x: x % 2 == 0, values))
 
 
 def falsey_only(values: Iterable[int | None]) -> list[int | None]:
     """Оставить только ложные значения (``0``, ``None``, ``""`` и т.п.)."""
-    raise NotImplementedError
+    return list(filterfalse(None, values))
 
 
 def select_by_mask(data: Iterable[str], mask: Iterable[bool]) -> list[str]:
     """Оставить ``data[i]`` там, где ``mask[i]`` истинно."""
-    raise NotImplementedError
+    return list(compress(data, mask))
 
 
 def drop_while_shorter_than(limit: int, words: Iterable[str]) -> list[str]:
@@ -57,7 +57,7 @@ def drop_while_shorter_than(limit: int, words: Iterable[str]) -> list[str]:
     Порог проверяется только в начале: после первого достаточно длинного слова
     короткие тоже попадают в результат.
     """
-    raise NotImplementedError
+    return list(dropwhile(lambda x: len(x) < limit, words))
 
 
 def count_taken(predicate: Callable[[int], bool], values: Iterable[int]) -> int:
@@ -65,4 +65,4 @@ def count_taken(predicate: Callable[[int], bool], values: Iterable[int]) -> int:
 
     Подсказка: ``sum(1 for _ in takewhile(...))``; вход может быть бесконечным.
     """
-    raise NotImplementedError
+    return sum(1 for _ in takewhile(predicate, values))

@@ -12,6 +12,9 @@
   ``<``/``>`` на нём бросают ``TypeError``;
 * если класс уже определяет ``__lt__`` и подобные, ``order=True`` бросает
   ``TypeError``.
+
+Практическое следствие: ``Version(1, 2) < 5`` — это ``TypeError``, а не
+``False``. Тест ждёт именно исключение.
 """
 
 from __future__ import annotations
@@ -23,17 +26,41 @@ if TYPE_CHECKING:
 
 
 def declare_version() -> type:
-    """Создать ``@dataclass(order=True)`` класс ``Version`` с ``major: int``, ``minor: int``."""
+    """Создать ``@dataclass(order=True)`` класс ``Version`` с ``major: int``, ``minor: int``.
+
+    ``cls(1, 2) < cls(1, 3)`` -> ``True``;
+    ``cls(2, 0) > cls(1, 99)`` -> ``True`` — первое поле важнее второго;
+    ``cls(1, 2) <= cls(1, 2)`` -> ``True``;
+    ``cls(1, 2) < 5`` -> ``TypeError``.
+
+    Подсказка: ``@dataclass(order=True)``; поля объявляйте в том порядке, в
+    котором они должны сравниваться.
+    """
     raise NotImplementedError
 
 
 def sorted_versions(versions: Iterable[object]) -> list[object]:
-    """Отсортировать версии по возрастанию и вернуть список."""
+    """Отсортировать версии по возрастанию и вернуть список.
+
+    ``sorted_versions([Version(2, 1), Version(1, 4), Version(1, 0)])`` ->
+    ``[Version(1, 0), Version(1, 4), Version(2, 1)]``;
+    ``sorted_versions([])`` -> ``[]``.
+
+    Подсказка: ``sorted(versions)`` — ``order=True`` уже дал все операторы.
+    """
     raise NotImplementedError
 
 
 def max_version(versions: Iterable[object]) -> object | None:
-    """Вернуть максимальную версию (или ``None`` для пустого входа)."""
+    """Вернуть максимальную версию (или ``None`` для пустого входа).
+
+    ``max_version([Version(1, 2), Version(3, 0)])`` -> ``Version(3, 0)``;
+    ``max_version([])`` -> ``None`` — пустой вход не ошибка;
+    ``max_version([Version(1, 2)])`` -> эта же версия.
+
+    Подсказка: ``max`` на пустой последовательности бросает ``ValueError``,
+    поэтому сначала материализуйте вход в список и проверьте пустоту.
+    """
     raise NotImplementedError
 
 
@@ -42,5 +69,11 @@ def order_without_eq_is_rejected() -> bool:
 
     Объявите такой класс. Если при объявлении брошен ``ValueError`` — вернуть
     ``True``, иначе ``False``.
+
+    Ошибка возникает в момент применения декоратора, а не при создании
+    экземпляра.
+
+    Подсказка: ``try: @dataclass(order=True, eq=False) class Bad: ...`` и
+    ``except ValueError: return True``.
     """
     raise NotImplementedError

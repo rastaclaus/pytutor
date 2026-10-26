@@ -23,7 +23,7 @@ def flatten(nested: Iterable[Iterable[int]]) -> list[int]:
 
     ``[[1, 2], [], [3]]`` даёт ``[1, 2, 3]``. Вход может быть генератором.
     """
-    raise NotImplementedError
+    return list(chain.from_iterable(nested))
 
 
 def concat(*iterables: Iterable[str]) -> list[str]:
@@ -31,7 +31,7 @@ def concat(*iterables: Iterable[str]) -> list[str]:
 
     ``concat("ab", ["c"], ())`` даёт ``["a", "b", "c"]``.
     """
-    raise NotImplementedError
+    return list(chain(*iterables))
 
 
 def words_of(lines: Iterable[str]) -> list[str]:
@@ -40,7 +40,7 @@ def words_of(lines: Iterable[str]) -> list[str]:
     ``words_of(["a b", "c"])`` даёт ``["a", "b", "c"]``. Пустые строки
     не должны давать пустых слов.
     """
-    raise NotImplementedError
+    return list(chain.from_iterable(map(str.split, lines)))
 
 
 def take_flattened(nested: Iterable[Iterable[int]], n: int) -> list[int]:
@@ -48,4 +48,4 @@ def take_flattened(nested: Iterable[Iterable[int]], n: int) -> list[int]:
 
     Подсказка: ``islice(chain.from_iterable(nested), n)``.
     """
-    raise NotImplementedError
+    return list(islice(chain.from_iterable(nested), n))

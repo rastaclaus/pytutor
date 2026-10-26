@@ -33,6 +33,10 @@ def make_validator(min_len: int = 0, max_len: int | None = None) -> Callable[[st
     return partial(_check_length, min_len=min_len, max_len=max_len)
 
 
+def make_trimmed_validator(min_len: int = 0, max_len: int | None = None) -> Callable[[str], bool]:
+    return pipeline(str.strip, make_validator(min_len=min_len, max_len=max_len))
+
+
 class Logger:
     def __init__(self, prefix: str) -> None:
         self.prefix = prefix

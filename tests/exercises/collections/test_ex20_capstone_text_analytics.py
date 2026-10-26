@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections import OrderedDict, deque
+from collections import Counter, OrderedDict, deque
 
 from pytutor.exercises.collections import ex20_capstone_text_analytics as ex
 
@@ -16,9 +16,9 @@ def test_tokenize() -> None:
 
 def test_word_frequencies_excludes_stop_words() -> None:
     freqs = ex.word_frequencies("и в на как что")
-    assert freqs == OrderedDict()
+    assert freqs == Counter()
     freqs = ex.word_frequencies("кот и пёс и кот")
-    assert freqs == OrderedDict([("кот", 2), ("пёс", 1)])
+    assert freqs == Counter({"кот": 2, "пёс": 1})
 
 
 def test_bigram_frequencies() -> None:

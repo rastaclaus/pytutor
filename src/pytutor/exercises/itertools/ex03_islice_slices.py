@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 def head(n: int, iterable: Iterable[int]) -> list[int]:
     """Вернуть первые ``n`` элементов потока."""
-    raise NotImplementedError
+    return list(islice(iterable, n))
 
 
 def drop_first(n: int, iterable: Iterable[int]) -> list[int]:
@@ -30,7 +30,7 @@ def drop_first(n: int, iterable: Iterable[int]) -> list[int]:
 
     Подсказка: ``islice(iterable, n, None)``.
     """
-    raise NotImplementedError
+    return list(islice(iterable, n, None))
 
 
 def every_nth(n: int, iterable: Iterable[int]) -> list[int]:
@@ -39,7 +39,7 @@ def every_nth(n: int, iterable: Iterable[int]) -> list[int]:
     ``every_nth(3, range(7))`` даёт ``[0, 3, 6]``. Для ``n <= 0`` —
     ``ValueError``.
     """
-    raise NotImplementedError
+    return list(islice(iterable, None, None, n))
 
 
 def nth(iterable: Iterable[int], index: int, default: int | None = None) -> int | None:
@@ -47,9 +47,12 @@ def nth(iterable: Iterable[int], index: int, default: int | None = None) -> int 
 
     Если элемента нет — ``default``. Для ``index < 0`` — ``ValueError``.
     """
-    raise NotImplementedError
+    if index < 0:
+        msg = "index must be non-negative"
+        raise ValueError(msg)
+    return next(islice(iterable, index, None, 1), default)
 
 
 def first_three(iterable: Iterable[int]) -> Iterator[int]:
     """Вернуть именно итератор первых трёх элементов (не список)."""
-    raise NotImplementedError
+    return islice(iterable, 3)

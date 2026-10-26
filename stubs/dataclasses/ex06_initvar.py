@@ -10,6 +10,9 @@
 * в ``fields()`` его нет, и атрибута ``self.<имя>`` после инициализации тоже нет.
 
 Если у ``InitVar`` нет значения по умолчанию, аргумент обязателен при создании.
+
+Практическое следствие: ``cls("alice")`` без пароля — это ``TypeError``, а не
+``ValueError``: сигнатуру проверяет сам Python.
 """
 
 from __future__ import annotations
@@ -28,20 +31,48 @@ def declare_user() -> type:
       присвойте ``password_hash = f"hash-{password}"``.
 
     Метод ``__post_init__(self, password: str)`` принимает ``InitVar``.
+
+    Поведение:
+
+    * ``cls("alice", "secret")`` -> ``username == "alice"`` и
+      ``password_hash == "hash-secret"``;
+    * ``hasattr(user, "password")`` -> ``False``;
+    * ``[f.name for f in fields(cls)] == ["username", "password_hash"]``;
+    * ``cls("alice")`` -> ``TypeError``.
+
+    Подсказка: параметр ``__post_init__`` должен называться так же, как
+    ``InitVar``, и идти в том же порядке объявления.
     """
     raise NotImplementedError
 
 
 def make_user(username: str, password: str) -> object:
-    """Создать ``User``."""
+    """Создать ``User``.
+
+    ``make_user("alice", "secret").password_hash == "hash-secret"``.
+
+    Подсказка: переиспользуйте ``declare_user()``.
+    """
     raise NotImplementedError
 
 
 def initvar_field_names() -> list[str]:
-    """Вернуть имена настоящих полей ``User`` (``fields()``), без ``InitVar``."""
+    """Вернуть имена настоящих полей ``User`` (``fields()``), без ``InitVar``.
+
+    Ожидаемый результат — ``["username", "password_hash"]``: ``password``
+    в ``fields()`` не попадает.
+
+    Подсказка: ``[item.name for item in fields(cls)]``.
+    """
     raise NotImplementedError
 
 
 def has_password_attribute(user: object) -> bool:
-    """Вернуть ``True``, если у экземпляра остался атрибут ``password``."""
+    """Вернуть ``True``, если у экземпляра остался атрибут ``password``.
+
+    ``make_user("alice", "secret")`` -> ``False``: ``InitVar`` не превращается
+    в атрибут.
+
+    Подсказка: ``hasattr(user, "password")``.
+    """
     raise NotImplementedError

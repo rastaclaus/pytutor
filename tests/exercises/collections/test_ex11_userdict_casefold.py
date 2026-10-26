@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from pytutor.exercises.collections import ex11_userdict_casefold as ex
 
 
@@ -27,7 +29,7 @@ def test_case_insensitive_delete_and_contains() -> None:
 
 def test_case_insensitive_missing_key() -> None:
     d = ex.CaseInsensitiveDict()
-    with __import__("pytest").raises(KeyError):
+    with pytest.raises(KeyError):
         _ = d["ну"]
     assert None not in d
 

@@ -16,6 +16,7 @@
 from __future__ import annotations
 
 import operator
+from functools import reduce
 from itertools import accumulate
 from typing import TYPE_CHECKING
 
@@ -25,7 +26,7 @@ if TYPE_CHECKING:
 
 def running_sum(numbers: Iterable[int]) -> list[int]:
     """Бегущая сумма: ``[1, 2, 3] -> [1, 3, 6]``."""
-    raise NotImplementedError
+    return list(accumulate(numbers, operator.add))
 
 
 def running_sum_with_start(start: int, numbers: Iterable[int]) -> list[int]:
@@ -33,17 +34,17 @@ def running_sum_with_start(start: int, numbers: Iterable[int]) -> list[int]:
 
     Для пустого входа результат — ``[start]``.
     """
-    raise NotImplementedError
+    return list(accumulate(numbers, operator.add, initial=start))
 
 
 def running_product(numbers: Iterable[int]) -> list[int]:
     """Бегущее произведение."""
-    raise NotImplementedError
+    return list(accumulate(numbers, operator.mul))
 
 
 def running_max(numbers: Iterable[int]) -> list[int]:
     """Бегущий максимум: ``[3, 1, 4] -> [3, 3, 4]``."""
-    raise NotImplementedError
+    return list(accumulate(numbers, max))
 
 
 def running_balance(transactions: Iterable[int]) -> list[int]:
@@ -51,12 +52,12 @@ def running_balance(transactions: Iterable[int]) -> list[int]:
 
     Подсказка: ``initial=0`` добавляет нулевой баланс в начало.
     """
-    raise NotImplementedError
+    return list(accumulate(transactions, operator.add, initial=0))
 
 
 def final_sum(numbers: Iterable[int]) -> int:
     """Только итоговая сумма (без истории), через ``functools.reduce``."""
-    raise NotImplementedError
+    return reduce(operator.add, numbers, 0)
 
 
 def running_pairwise_ratio(numbers: Iterable[int]) -> list[float]:
@@ -66,4 +67,4 @@ def running_pairwise_ratio(numbers: Iterable[int]) -> list[float]:
     должно остаться как есть — проверьте, что даёт ``accumulate``
     с такой функцией и ``initial``.
     """
-    raise NotImplementedError
+    return list(accumulate(numbers, operator.truediv))

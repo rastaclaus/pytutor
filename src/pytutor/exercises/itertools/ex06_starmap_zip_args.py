@@ -32,27 +32,27 @@ def _format_measurement(value: int, *, unit: str) -> str:
 
 def apply_pairs(func: Callable[[int, int], int], pairs: Iterable[tuple[int, int]]) -> list[int]:
     """Применить ``func`` к каждой паре аргументов."""
-    raise NotImplementedError
+    return list(starmap(func, pairs))
 
 
 def dot_product(left: Iterable[int], right: Iterable[int]) -> int:
     """Скалярное произведение через ``starmap`` и ``operator.mul``."""
-    raise NotImplementedError
+    return sum(map(operator.mul, left, right, strict=False))
 
 
 def total_cost(rows: Iterable[tuple[int, int]]) -> int:
     """Сумма ``price * quantity`` по строкам ``(price, quantity)``."""
-    raise NotImplementedError
+    return sum(starmap(operator.mul, rows))
 
 
 def repeat_apply(func: Callable[[str], str], value: str, times: int) -> list[str]:
     """Применить ``func`` к ``value`` ровно ``times`` раз (через ``map`` + ``repeat``)."""
-    raise NotImplementedError
+    return list(map(func, repeat(value, times)))
 
 
 def pair_with_constant(values: Iterable[str], constant: int) -> list[tuple[str, int]]:
     """Приписать каждому значению одну и ту же константу."""
-    raise NotImplementedError
+    return list(zip(values, repeat(constant), strict=False))
 
 
 def apply_all(functions: Iterable[Callable[[int], int]], value: int) -> list[int]:
@@ -61,14 +61,16 @@ def apply_all(functions: Iterable[Callable[[int], int]], value: int) -> list[int
     Подсказка: ``map`` умеет несколько итерируемых аргументов:
     ``map(operator.call, functions, repeat(value))``.
     """
-    raise NotImplementedError
+    return list(map(operator.call, functions, repeat(value)))  # ty: ignore[invalid-argument-type]
 
 
 def make_formatter(unit: str) -> Callable[[int], str]:
     """Вернуть функцию ``value -> "value unit"`` через ``functools.partial``."""
-    raise NotImplementedError
+    return partial(_format_measurement, unit=unit)
 
 
 def format_values(values: Iterable[int], unit: str) -> list[str]:
     """Отформатировать все значения с одной единицей измерения."""
-    raise NotImplementedError
+    formatter = make_formatter(unit)
+    return list(map(formatter, values))
+

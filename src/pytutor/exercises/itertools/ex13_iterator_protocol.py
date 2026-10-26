@@ -16,6 +16,7 @@
 
 from __future__ import annotations
 
+from itertools import count
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -27,12 +28,13 @@ def exhaust(values: Iterable[int]) -> tuple[list[int], list[int]]:
 
     Для итератора второй проход пуст — это и есть демонстрация одноразовости.
     """
-    raise NotImplementedError
+    return list(values), list(values)
 
 
 def materialise(values: Iterable[int]) -> tuple[list[int], list[int]]:
     """Вернуть два одинаковых прохода, гарантированно сохранив данные."""
-    raise NotImplementedError
+    saved = list(values)
+    return saved, saved
 
 
 def is_iterator(value: object) -> bool:
@@ -40,7 +42,7 @@ def is_iterator(value: object) -> bool:
 
     Подсказка: у итератора есть и ``__iter__``, и ``__next__``; ``iter(obj) is obj``.
     """
-    raise NotImplementedError
+    return iter(value) is value if hasattr(value, "__iter__") else False
 
 
 def read_until_sentinel(read: Callable[[], int], sentinel: int) -> list[int]:
@@ -48,7 +50,7 @@ def read_until_sentinel(read: Callable[[], int], sentinel: int) -> list[int]:
 
     Сам ``sentinel`` в результат не попадает.
     """
-    raise NotImplementedError
+    return list(iter(read, sentinel))
 
 
 def lazy_map_side_effects(values: Iterable[int], seen: list[int]) -> tuple[Iterator[int], list[int]]:
@@ -57,7 +59,11 @@ def lazy_map_side_effects(values: Iterable[int], seen: list[int]) -> tuple[Itera
     Итератор умножает элементы на 2 и дописывает исходное значение в ``seen``.
     До первого ``next()`` журнал должен оставаться пустым.
     """
-    raise NotImplementedError
+    def doubled() -> Iterator[int]:
+        for value in values:
+            seen.append(value)
+            yield value * 2
+    return doubled(), seen
 
 
 def count_until_limit(limit: int, seen: list[int]) -> int:
@@ -67,4 +73,12 @@ def count_until_limit(limit: int, seen: list[int]) -> int:
     ровно столько, сколько требуется. Вернуть последнее добавленное число.
     Подсказка: ``itertools.count(1)`` + ранний ``break``.
     """
-    raise NotImplementedError
+    total = 0
+    last = 0
+    for value in count(1):
+        total += value
+        seen.append(value)
+        last = value
+        if total > limit:
+            break
+    return last

@@ -10,6 +10,14 @@
 соединены ``frozen=True``, дескриптор ``IntField``, ``ClassVar`` и
 ``field(init=False, compare=False, repr=False)``. Ваша задача — реализовать
 функции и класс ``Project``.
+
+Тексты ошибок, которые проверяются:
+
+* приоритет вне диапазона — от дескриптора, в сообщении есть ``диапазон``;
+* переход из ``done`` — ``ValueError`` со словом ``завершена``;
+* неизвестный статус — ``ValueError`` со словом ``статус``;
+* присваивание полю заявки — stdlib ``FrozenInstanceError`` с
+  ``cannot assign to field``.
 """
 
 from __future__ import annotations
@@ -74,17 +82,44 @@ class Ticket:
 
 
 def reset_history() -> None:
-    """Очистить журнал ``Ticket.history``."""
+    """Очистить журнал ``Ticket.history``.
+
+    После вызова ``history() == []``.
+
+    Подсказка: ``Ticket.history.clear()`` — мутация на месте, а не
+    переприсваивание: иначе ``ClassVar`` класса не изменится.
+    """
     raise NotImplementedError
 
 
 def history() -> list[str]:
-    """Вернуть копию журнала ``Ticket.history`` (не сам список)."""
+    """Вернуть копию журнала ``Ticket.history`` (не сам список).
+
+    ``new_ticket("T1", "x")`` -> ``history() == ["T1:new"]``;
+    мутация возвращённого списка не меняет журнал: после
+    ``history().append("garbage")`` следующий ``history()`` по-прежнему
+    ``["T1:new"]``.
+
+    Подсказка: ``list(Ticket.history)`` — именно копия, поэтому ``copy``
+    тоже подойдёт, а вот ``return Ticket.history`` нет.
+    """
     raise NotImplementedError
 
 
 def new_ticket(ticket_id: str, title: str, priority: object = 1) -> object:
-    """Создать заявку в статусе ``new``."""
+    """Создать заявку в статусе ``new``.
+
+    ``new_ticket("T1", "заголовок", 3)`` даёт ``status == "new"``,
+    ``priority == 3``, ``tags == ()``;
+    ``new_ticket("T1", "x", "4").priority == 4`` — строка приводится к ``int``
+    дескриптором;
+    ``new_ticket("T1", "x", 6)`` -> ``ValueError`` (в сообщении есть
+    ``диапазон``) — допустимы только 1..5;
+    создание записывает ``"T1:new"`` в журнал.
+
+    Подсказка: ``Ticket(ticket_id=..., title=..., priority=priority)``.
+    Поля класса заморожены, поэтому все аргументы — именованные.
+    """
     raise NotImplementedError
 
 
@@ -96,6 +131,24 @@ def transition(ticket: object, status: Status) -> object:
     * результат — ``replace(ticket, status=status)``, после чего
       ``previous_status`` результата должен равняться прежнему статусу
       (поставьте его через ``object.__setattr__``: класс заморожен).
+
+    Поведение:
+
+    * ``moved = transition(new_ticket("T1", "x", 2), "in_progress")``:
+      ``moved is not ticket``, ``moved.status == "in_progress"``,
+      ``ticket.status == "new"``, ``moved.previous_status == "new"``;
+    * цепочка ``new -> in_progress -> done`` даёт ``previous_status ==
+      "in_progress"`` у финальной заявки;
+    * ``transition(done_ticket, "new")`` -> ``ValueError`` (``завершена``);
+    * ``transition(ticket, "archived")`` -> ``ValueError`` (``статус``) — его
+      поднимает ``__post_init__`` нового объекта.
+
+    Обратите внимание: ``replace`` вызывает ``__init__``, а значит
+    ``__post_init__`` сработает заново и допишет строку
+    ``"T1:in_progress"`` в журнал.
+
+    Подсказка: проверку «уже завершена» делайте **до** ``replace``, иначе
+    новый объект успеет записаться в журнал.
     """
     raise NotImplementedError
 
@@ -113,12 +166,29 @@ def declare_project() -> type:
     * ``add(ticket)`` — добавить заявку, вернуть ``self``;
     * ``open_tickets()`` — заявки в статусах из ``OPEN_STATUSES``;
     * ``by_priority()`` — ``{priority: count}`` по всем заявкам.
+
+    Поведение:
+
+    * ``project.add(ticket) is project``;
+    * ``[t.ticket_id for t in demo_project().open_tickets()] == ["T1", "T2"]``
+      — ``done`` в открытые не попадает;
+    * ``by_priority()`` у демо-проекта -> ``{3: 1, 5: 2}``.
+
+    Подсказка: ``add`` возвращает ``self`` (не ``None``), ``open_tickets``
+    фильтрует по ``ticket.status in OPEN_STATUSES``.
     """
     raise NotImplementedError
 
 
 def project_report(project: object) -> dict:  # type: ignore[type-arg]
-    """Собрать сводку ``{"name", "total", "open", "by_priority"}``."""
+    """Собрать сводку ``{"name", "total", "open", "by_priority"}``.
+
+    У ``demo_project()``: ``name == "demo"``, ``total == 3``, ``open == 2``,
+    ``by_priority == {3: 1, 5: 2}`` — ровно четыре ключа.
+
+    Подсказка: ``total`` — ``len(project.tickets)``, ``open`` —
+    ``len(project.open_tickets())``, остальное делегируйте методам.
+    """
     raise NotImplementedError
 
 
@@ -128,10 +198,23 @@ def demo_project() -> object:
     * ``T1`` — приоритет 3, остаётся ``new``;
     * ``T2`` — приоритет 5, переводится в ``in_progress``;
     * ``T3`` — приоритет 5, переводится в ``in_progress``, затем в ``done``.
+
+    Ожидаемо: статусы в порядке добавления — ``["new", "in_progress", "done"]``.
+
+    Подсказка: ``transition`` возвращает новую заявку — в проект добавляйте
+    результат, а не исходную.
     """
     raise NotImplementedError
 
 
 def ticket_snapshot(ticket: object) -> dict:  # type: ignore[type-arg]
-    """Вернуть ``asdict(ticket)`` — снимок без ``ClassVar``."""
+    """Вернуть ``asdict(ticket)`` — снимок без ``ClassVar``.
+
+    У ``new_ticket("T1", "x", 2)``: ``snapshot["ticket_id"] == "T1"``,
+    ``snapshot["priority"] == 2``, ``snapshot["previous_status"] is None``,
+    ключа ``"history"`` нет — ``ClassVar`` в ``asdict`` не попадает.
+
+    Подсказка: ``asdict(ticket)``. Дескриптор ``priority`` при этом вернёт
+    обычное число, приведённое к ``int``.
+    """
     raise NotImplementedError

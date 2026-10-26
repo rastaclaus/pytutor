@@ -18,6 +18,20 @@ def test_bucket_size() -> None:
 def test_bucket_size_rejects_bad_bucket() -> None:
     with pytest.raises(ValueError, match="bucket"):
         ex.bucket_size([], 0)
+    with pytest.raises(ValueError, match="bucket"):
+        ex.bucket_size([], -3)
+
+
+def test_bucket_labels_rejects_bad_bucket() -> None:
+    with pytest.raises(ValueError, match="bucket"):
+        ex.bucket_labels([], 0)
+
+
+def test_step_buckets_reject_bad_parameters() -> None:
+    with pytest.raises(ValueError, match="bucket"):
+        list(ex.stream_buckets([], 0, 1))
+    with pytest.raises(ValueError, match="window"):
+        list(ex.stream_buckets([], 1, 0))
 
 
 def test_bucket_labels() -> None:
