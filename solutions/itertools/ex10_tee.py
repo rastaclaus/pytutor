@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from itertools import filterfalse, tee
+from itertools import filterfalse, islice, tee
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable
+    from collections.abc import Callable, Iterable, Iterator
 
 
 def duplicate(values: Iterable[int]) -> tuple[list[int], list[int]]:
@@ -48,3 +48,13 @@ def lookahead_pairs(values: Iterable[int]) -> list[tuple[int, int | None]]:
     current, following = tee(values, 2)
     next(following, None)
     return [(value, next(following, None)) for value in current]
+
+
+def windowed(values: Iterable[int], size: int) -> Iterator[tuple[int, ...]]:
+    """Бонус: скользящее окно длины ``size`` через ``tee``."""
+    if size < 1:
+        msg = f"size must be positive, got {size}"
+        raise ValueError(msg)
+    copies = tee(values, size)
+    shifted = [islice(copy, offset, None) for offset, copy in enumerate(copies)]
+    yield from zip(*shifted, strict=False)

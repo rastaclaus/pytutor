@@ -117,3 +117,21 @@ def lookahead_pairs(values: Iterable[int]) -> list[tuple[int, int | None]]:
     ``(value, next(following, None))`` в обход ``current``.
     """
     raise NotImplementedError
+
+
+def windowed(values: Iterable[int], size: int) -> Iterator[tuple[int, ...]]:
+    """Бонус: скользящее окно длины ``size`` через ``tee``.
+
+    ``list(windowed([1, 2, 3, 4], 2))`` -> ``[(1, 2), (2, 3), (3, 4)]``;
+    ``list(windowed([1, 2], 3))`` -> ``[]`` — элементов меньше окна;
+    ``list(windowed([], 1))`` -> ``[]``;
+    ``windowed([1], 0)`` -> ``ValueError`` (в сообщении есть ``size``).
+
+    Источник читается ровно один раз и только по мере потребления; вход
+    может быть бесконечным генератором.
+
+    Подсказка: создайте ``size`` копий через ``tee(values, size)`` и
+    сдвиньте каждую копию на свой номер через ``islice``; затем ``zip(*copies)``.
+    Проверяется тестом с пометкой ``bonus`` (``uv run pytest -m bonus``).
+    """
+    raise NotImplementedError
