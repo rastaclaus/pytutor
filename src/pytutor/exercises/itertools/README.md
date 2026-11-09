@@ -1,6 +1,6 @@
 # Набор упражнений по `itertools`
 
-15 упражнений от простого к сложному. Каждое упражнение — это модуль-заготовка
+16 упражнений от простого к сложному. Каждое упражнение — это модуль-заготовка
 в `src/pytutor/exercises/itertools/`, автотесты к нему в
 `tests/exercises/itertools/` и эталон в `solutions/itertools/`.
 
@@ -56,6 +56,7 @@ PYTUTOR_SOLUTION=1 uv run pytest
 | 13 | `ex13_iterator_protocol.py` | одноразовость, ленивость, `iter(callable, sentinel)` | 6 |
 | 14 | `ex14_recipes.py` | рецепты: `sliding_window`, `running_mean`, `sum_of_squares` | 7 |
 | 15 | `ex15_capstone.py` | ленивый ETL: разбор → батчи → агрегация | 8 |
+| 16 | `ex16_debug_groupby.py` | найди баг: аналитика серий на `groupby` | 6 |
 
 ## Подводные камни, которые проверяются
 

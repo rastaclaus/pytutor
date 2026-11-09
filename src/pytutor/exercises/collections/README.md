@@ -1,6 +1,6 @@
 # Набор упражнений по `collections`
 
-20 упражнений от простого к сложному. Каждое упражнение — это модуль-заготовка
+21 упражнение от простого к сложному. Каждое упражнение — это модуль-заготовка
 в `src/pytutor/exercises/collections/`, автотесты к нему в
 `tests/exercises/collections/` и эталон в `solutions/collections/`.
 
@@ -54,6 +54,7 @@ PYTUTOR_SOLUTION=1 uv run pytest
 | 18 | `ex18_custom_mapping.py` | `MutableMapping` с нуля: лог, счётчик обращений | 7 |
 | 19 | `ex19_cross_module.py` | связка collections × itertools × functools | 7 |
 | 20 | `ex20_capstone_text_analytics.py` | капстоун: конвейер аналитики текста | 8 |
+| 21 | `ex21_debug_lru.py` | найди баг: LRU-кэш с тремя дефектами | 5 |
 
 ## Подводные камни, которые проверяются
 

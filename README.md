@@ -23,7 +23,9 @@ CLI для навигации по наборам:
 
 ```bash
 uv run pytutor              # список наборов и число упражнений
-uv run pytutor itertools    # файлы одного набора
+uv run pytutor itertools    # файлы одного набора ([x] — решено)
+uv run pytutor status       # прогресс по всем наборам
+uv run pytutor status functools  # прогресс одного набора
 ```
 
 ## Уровни сложности
@@ -49,10 +51,20 @@ uv run pytutor itertools    # файлы одного набора
 
 | Модуль | Упражнений | Оглавление |
 |--------|-----------|------------|
-| `functools` | 15 | [src/pytutor/exercises/functools/README.md](src/pytutor/exercises/functools/README.md) |
-| `itertools` | 15 | [src/pytutor/exercises/itertools/README.md](src/pytutor/exercises/itertools/README.md) |
-| `collections` | 20 | [src/pytutor/exercises/collections/README.md](src/pytutor/exercises/collections/README.md) |
-| `dataclasses` | 20 | [src/pytutor/exercises/dataclasses/README.md](src/pytutor/exercises/dataclasses/README.md) |
+| `functools` | 16 | [src/pytutor/exercises/functools/README.md](src/pytutor/exercises/functools/README.md) |
+| `itertools` | 16 | [src/pytutor/exercises/itertools/README.md](src/pytutor/exercises/itertools/README.md) |
+| `collections` | 21 | [src/pytutor/exercises/collections/README.md](src/pytutor/exercises/collections/README.md) |
+| `dataclasses` | 21 | [src/pytutor/exercises/dataclasses/README.md](src/pytutor/exercises/dataclasses/README.md) |
+| `boss` | 4 | [src/pytutor/exercises/boss/](src/pytutor/exercises/boss/) |
+
+В каждом наборе есть упражнения «найди баг»: рабочий на вид код с тремя
+тонкими дефектами, который надо починить, не переписывая заново.
+В упражнениях с пометкой «Бонус» в докстринге спрятано необязательное задание
+повышенной сложности — оно не входит в обычный прогон:
+
+```bash
+uv run pytest -m bonus   # бонусные задания
+```
 
 ## Проверка эталонов
 

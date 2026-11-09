@@ -1,6 +1,6 @@
 # Набор упражнений по `functools`
 
-15 упражнений от простого к сложному. Каждое упражнение — это модуль-заготовка
+16 упражнений от простого к сложному. Каждое упражнение — это модуль-заготовка
 в `src/pytutor/exercises/functools/`, автотесты к нему в
 `tests/exercises/functools/` и эталон в `solutions/functools/`.
 
@@ -57,3 +57,4 @@ PYTUTOR_SOLUTION=1 uv run pytest
 | 13 | `ex13_singledispatchmethod.py` | диспетчеризация методов по типу аргумента | 7 |
 | 14 | `ex14_memoize_own.py` | свой `memoize` на `wraps` + `dict`, ключ из подписи | 7 |
 | 15 | `ex15_capstone.py` | конвейер: `retry` + `cache` + `partial` + `reduce` | 8 |
+| 16 | `ex16_debug_cmp_to_key.py` | найди баг: естественная сортировка файлов | 6 |
