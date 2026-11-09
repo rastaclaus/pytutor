@@ -14,6 +14,9 @@
 
 Общее правило: при пустом входе ``accumulate`` без ``initial`` даёт ``[]``,
 а с ``initial`` — ``[initial]``.
+
+Сценарий: банковская выписка — баланс после каждой операции, максимум на
+протяжении дня, бегущий итог корзины — всё это «reduce с историей».
 """
 
 from __future__ import annotations
@@ -44,7 +47,8 @@ def running_sum_with_start(start: int, numbers: Iterable[int]) -> list[int]:
     ``running_sum_with_start(0, [1])`` -> ``[0, 1]`` — длина на единицу больше
     длины входа.
 
-    Подсказка: ``accumulate(numbers, initial=start)``.
+    Подсказка: у ``accumulate`` есть именованный аргумент для стартового
+    значения.
     """
     raise NotImplementedError
 
@@ -56,7 +60,7 @@ def running_product(numbers: Iterable[int]) -> list[int]:
     ``running_product([])`` -> ``[]``;
     ``running_product([0, 5])`` -> ``[0, 0]`` — ноль обнуляет всё после себя.
 
-    Подсказка: ``accumulate(numbers, operator.mul)``.
+    Подсказка: нужна функция умножения из ``operator`` как бинарная операция.
     """
     raise NotImplementedError
 
@@ -68,7 +72,7 @@ def running_max(numbers: Iterable[int]) -> list[int]:
     ``running_max([])`` -> ``[]``;
     ``running_max([-5, -1])`` -> ``[-5, -1]``.
 
-    Подсказка: ``accumulate(numbers, max)``.
+    Подсказка: ``max`` — тоже бинарная функция, подходит как ``func``.
     """
     raise NotImplementedError
 
