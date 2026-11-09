@@ -24,6 +24,9 @@
   первым ушёл;
 * **стек (LIFO)** — забираем с того же конца, куда добавляли: последним пришёл,
   первым ушёл.
+
+Сценарий: очередь печати на принтере, стек отмены действий в редакторе и
+окно последних действий с ограничением памяти.
 """
 
 from __future__ import annotations
@@ -43,7 +46,7 @@ def make_queue(initial: Iterable[int]) -> deque[int]:
     ``isinstance(make_queue([1]), deque)`` -> ``True`` — вернуть нужно именно
     ``deque``, а не список.
 
-    Подсказка: ``deque(initial)``.
+    Подсказка: достаточно передать вход прямо в конструктор ``deque``.
     """
     raise NotImplementedError
 
@@ -59,8 +62,8 @@ def queue_push_pop(initial: Iterable[int], values: list[int]) -> list[int]:
     ``queue_push_pop([], [5])`` -> ``[5]``;
     ``queue_push_pop([1], [])`` -> ``[1]``.
 
-    Подсказка: ``extend(values)``, затем список из ``popleft()``. Длину берите
-    до извлечения: ``range(len(dq))``.
+    Подсказка: сначала пополните конец очереди, затем извлеките всё с другого
+    конца, пока очередь не опустеет (длину берите до извлечения).
     """
     raise NotImplementedError
 
@@ -93,8 +96,8 @@ def bounded_history(values: Iterable[int], maxlen: int) -> list[int]:
     Ноль и отрицательное значение — ошибка, хотя ``deque(maxlen=0)`` формально
     допустим и просто выбрасывает все элементы.
 
-    Подсказка: проверка ``maxlen <= 0``, затем ``list(deque(values,
-    maxlen=maxlen))``.
+    Подсказка: неположительный ``maxlen`` отклоняется до построения очереди:
+    конструктор с таким лимитом молча съест все элементы.
     """
     raise NotImplementedError
 
