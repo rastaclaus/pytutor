@@ -42,7 +42,10 @@ def identity_decorator(func: Callable[..., Any]) -> Callable[..., Any]:
     Подсказка: определите внутри ``wrapper(*args, **kwargs)`` и верните его,
     **не** вызывая ``wraps``.
     """
-    raise NotImplementedError
+    def wrapper(*args: Any, **kwargs: Any) -> Callable[..., Any]:
+        return func(*args, **kwargs)
+
+    return wrapper
 
 
 def preserving_decorator[**P, R](func: Callable[P, R]) -> Callable[P, R]:
@@ -57,4 +60,8 @@ def preserving_decorator[**P, R](func: Callable[P, R]) -> Callable[P, R]:
     Подсказка: тот же ``wrapper``, но с ``@wraps(func)``. ``__wrapped__`` и
     подпись появляются автоматически — вручную их копировать не надо.
     """
-    raise NotImplementedError
+    @wraps(func)
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+        return func(*args, **kwargs)
+
+    return wrapper

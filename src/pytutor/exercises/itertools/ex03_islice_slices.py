@@ -36,7 +36,10 @@ def head(n: int, iterable: Iterable[int]) -> list[int]:
     ``head(-1, [1, 2])`` -> ``ValueError`` с stdlib-текстом ``0 <= x``:
     отрицательного ``stop`` у ``islice`` нет, и перехватывать эту ошибку не надо.
     """
-    raise NotImplementedError
+    if n < 0:
+        msg = "n must be > 0"
+        raise ValueError(msg)
+    return list(islice(iterable, n))
 
 
 def drop_first(n: int, iterable: Iterable[int]) -> list[int]:
@@ -51,7 +54,7 @@ def drop_first(n: int, iterable: Iterable[int]) -> list[int]:
 
     Подсказка: ``islice(iterable, n, None)``.
     """
-    raise NotImplementedError
+    return list(islice(iterable, n, None, 1))
 
 
 def every_nth(n: int, iterable: Iterable[int]) -> list[int]:
@@ -66,7 +69,10 @@ def every_nth(n: int, iterable: Iterable[int]) -> list[int]:
     ``ValueError`` сами — шаг ``0`` у ``islice`` тоже даёт ``ValueError``, но
     с stdlib-текстом без буквы ``n``, а тест ищет именно её.
     """
-    raise NotImplementedError
+    if n < 1:
+        msg = "n must be >=1"
+        raise ValueError(msg)
+    return list(islice(iterable, 0, None, n))
 
 
 def nth(iterable: Iterable[int], index: int, default: int | None = None) -> int | None:
@@ -83,7 +89,10 @@ def nth(iterable: Iterable[int], index: int, default: int | None = None) -> int 
 
     Подсказка: ``next(islice(iterable, index, None), default)``.
     """
-    raise NotImplementedError
+    if index < 0:
+        msg = "index must be >= 0"
+        raise ValueError(msg)
+    return next(islice(iterable, index, None), default)
 
 
 def first_three(iterable: Iterable[int]) -> Iterator[int]:
@@ -99,4 +108,4 @@ def first_three(iterable: Iterable[int]) -> Iterator[int]:
 
     Подсказка: верните сам объект ``islice(iterable, 3)``, не оборачивая его.
     """
-    raise NotImplementedError
+    return islice(iterable, 3)

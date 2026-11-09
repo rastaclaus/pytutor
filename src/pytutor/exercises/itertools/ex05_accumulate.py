@@ -18,6 +18,7 @@
 
 from __future__ import annotations
 
+import functools
 import operator
 from itertools import accumulate
 from typing import TYPE_CHECKING
@@ -32,7 +33,7 @@ def running_sum(numbers: Iterable[int]) -> list[int]:
     ``running_sum([])`` -> ``[]``;
     ``running_sum([5])`` -> ``[5]`` — один элемент даёт один результат.
     """
-    raise NotImplementedError
+    return list(accumulate(numbers))
 
 
 def running_sum_with_start(start: int, numbers: Iterable[int]) -> list[int]:
@@ -46,7 +47,7 @@ def running_sum_with_start(start: int, numbers: Iterable[int]) -> list[int]:
 
     Подсказка: ``accumulate(numbers, initial=start)``.
     """
-    raise NotImplementedError
+    return list(accumulate(numbers, initial=start))
 
 
 def running_product(numbers: Iterable[int]) -> list[int]:
@@ -58,7 +59,7 @@ def running_product(numbers: Iterable[int]) -> list[int]:
 
     Подсказка: ``accumulate(numbers, operator.mul)``.
     """
-    raise NotImplementedError
+    return list(accumulate(numbers, operator.mul))
 
 
 def running_max(numbers: Iterable[int]) -> list[int]:
@@ -70,7 +71,7 @@ def running_max(numbers: Iterable[int]) -> list[int]:
 
     Подсказка: ``accumulate(numbers, max)``.
     """
-    raise NotImplementedError
+    return list(accumulate(numbers, max))
 
 
 def running_balance(transactions: Iterable[int]) -> list[int]:
@@ -83,7 +84,7 @@ def running_balance(transactions: Iterable[int]) -> list[int]:
 
     Подсказка: ``initial=0`` добавляет нулевой баланс в начало.
     """
-    raise NotImplementedError
+    return list(accumulate(transactions, initial=0))
 
 
 def final_sum(numbers: Iterable[int]) -> int:
@@ -93,7 +94,7 @@ def final_sum(numbers: Iterable[int]) -> int:
     ``final_sum([])`` -> ``0`` — нейтральный элемент передан как
     ``initializer``.
     """
-    raise NotImplementedError
+    return functools.reduce(operator.add, numbers, 0)
 
 
 def running_pairwise_ratio(numbers: Iterable[int]) -> list[float]:
@@ -111,4 +112,4 @@ def running_pairwise_ratio(numbers: Iterable[int]) -> list[float]:
     передайте первый элемент как ``initial`` и сверните только хвост:
     ``accumulate(values[1:], operator.truediv, initial=values[0])``.
     """
-    raise NotImplementedError
+    return list(accumulate(numbers, operator.truediv))

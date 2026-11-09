@@ -33,7 +33,7 @@ def merge_uneven(left: Iterable[str], right: Iterable[int]) -> list[tuple[str, i
 
     Подсказка: у ``zip_longest`` ``fillvalue`` по умолчанию как раз ``None``.
     """
-    raise NotImplementedError
+    return list(zip_longest(left, right))
 
 
 def merge_with_fill(left: Iterable[str], right: Iterable[int], fill: int) -> list[tuple[str, int]]:
@@ -48,7 +48,7 @@ def merge_with_fill(left: Iterable[str], right: Iterable[int], fill: int) -> lis
 
     Подсказка: ``zip_longest(left, right, fillvalue=fill)``.
     """
-    raise NotImplementedError
+    return list(zip_longest(left, right, fillvalue=fill))  # ty: ignore[invalid-return-type]
 
 
 def zip_strict(left: Iterable[int], right: Iterable[int]) -> list[tuple[int, int]]:
@@ -62,7 +62,7 @@ def zip_strict(left: Iterable[int], right: Iterable[int]) -> list[tuple[int, int
 
     Подсказка: ``zip(left, right, strict=True)``.
     """
-    raise NotImplementedError
+    return list(zip(left, right, strict=True))
 
 
 def same_length(left: Iterable[int], right: Iterable[int]) -> bool:
@@ -78,7 +78,8 @@ def same_length(left: Iterable[int], right: Iterable[int]) -> bool:
     Подсказка: пройдите потоком ``zip(left, right, strict=True)``, ничего не
     сохраняя (``for _ in ...: pass``), и верните ``True``; исключение уйдёт само.
     """
-    raise NotImplementedError
+    _ = list(zip(left, right, strict=True))
+    return True
 
 
 def grouper(items: Iterable[str], size: int) -> list[tuple[str, ...]]:
@@ -93,7 +94,10 @@ def grouper(items: Iterable[str], size: int) -> list[tuple[str, ...]]:
     Для ``size < 1`` бросьте ``ValueError`` сами: ``range``/``*`` молча дадут
     пустой результат, а задание требует ошибку.
     """
-    raise NotImplementedError
+    if size < 1:
+        msg = "size must be > 1"
+        raise ValueError(msg)
+    return list(zip_longest(*[iter(items)] * size, fillvalue=""))
 
 
 def transpose(matrix: list[list[int]]) -> list[tuple[int, ...]]:
@@ -108,4 +112,4 @@ def transpose(matrix: list[list[int]]) -> list[tuple[int, ...]]:
     отдельно, потому что ``zip()`` без аргументов дал бы пустой результат,
     но ``strict=True`` с ним бессмысленен.
     """
-    raise NotImplementedError
+    return list(zip(*matrix, strict=True))

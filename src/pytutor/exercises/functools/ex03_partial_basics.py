@@ -37,7 +37,7 @@ def make_multiplier(factor: int) -> Callable[[int], int]:
     Подсказка: ``partial(operator.mul, factor)`` — тогда свободным остаётся
     второй аргумент, то есть множимое.
     """
-    raise NotImplementedError
+    return partial(operator.mul, factor)
 
 
 def make_power(exp: int) -> Callable[[int], int]:
@@ -52,7 +52,7 @@ def make_power(exp: int) -> Callable[[int], int]:
     ``partial(pow, exp)`` зафиксировала бы основание, и результат был бы
     ``exp ** x``.
     """
-    raise NotImplementedError
+    return partial(pow, exp=exp)
 
 
 def add_all(numbers: Iterable[int], amount: int) -> list[int]:
@@ -67,7 +67,7 @@ def add_all(numbers: Iterable[int], amount: int) -> list[int]:
     Подсказка: ``map(partial(operator.add, amount), numbers)``. Результат
     ``map`` нужно материализовать в список.
     """
-    raise NotImplementedError
+    return list(map(partial(operator.add, amount), numbers))
 
 
 def make_price_formatter(currency: str, decimals: int = 2) -> Callable[[float], str]:
@@ -81,4 +81,4 @@ def make_price_formatter(currency: str, decimals: int = 2) -> Callable[[float], 
     Подсказка: ``partial(format_currency, currency=currency, decimals=decimals)``;
     свободным остаётся первый параметр ``value``.
     """
-    raise NotImplementedError
+    return partial(format_currency,currency=currency, decimals=decimals)

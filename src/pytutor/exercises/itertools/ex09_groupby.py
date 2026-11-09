@@ -41,7 +41,7 @@ def runs(values: Iterable[str]) -> list[tuple[str, int]]:
 
     Подсказка: ``[(key, sum(1 for _ in group)) for key, group in groupby(values)]``.
     """
-    raise NotImplementedError
+    return [(key, sum(1 for _ in group)) for key, group in groupby(values)]
 
 
 def groups_as_lists(
@@ -59,7 +59,7 @@ def groups_as_lists(
     Подсказка: список внутри обязателен. Если вернуть сами под-итераторы,
     после перехода к следующей группе они окажутся пустыми.
     """
-    raise NotImplementedError
+    return [(key, list(group)) for key, group in groupby(values, key=key)]
 
 
 def unique_justseen(values: Iterable[str]) -> list[str]:
@@ -73,7 +73,11 @@ def unique_justseen(values: Iterable[str]) -> list[str]:
     Подсказка: ``map(itemgetter(0), groupby(values))`` — рецепт
     ``unique_justseen`` из документации.
     """
-    raise NotImplementedError
+    return list(map(itemgetter(0), groupby(values)))
+
+
+def _check_odd(value: int) -> str:
+    return "чётные" if value % 2 == 0 else "нечётные"
 
 
 def group_by_parity(values: Iterable[int]) -> dict[str, list[int]]:
@@ -90,7 +94,7 @@ def group_by_parity(values: Iterable[int]) -> dict[str, list[int]]:
 
     Подсказка: ``0 % 2 == 0`` — это чётные, ``1`` — нечётные.
     """
-    raise NotImplementedError
+    return {key: list(group) for key, group in groupby(sorted(values, key=_check_odd), key=_check_odd)}
 
 
 def longest_run(values: Iterable[str]) -> tuple[str, int] | None:
@@ -104,7 +108,12 @@ def longest_run(values: Iterable[str]) -> tuple[str, int] | None:
     Подсказка: обходите ``groupby`` и сравнивайте строго (``>``), а не ``>=`` —
     иначе при равенстве победит последняя.
     """
-    raise NotImplementedError
+    best: tuple[str, int] | None = None
+    for key, group in groupby(values):
+        group_len = sum(1 for _ in group)
+        if best is None or group_len > best[1]:
+            best = (key, group_len)
+    return best
 
 
 def group_words_by_length(words: Iterable[str]) -> dict[int, list[str]]:
@@ -121,4 +130,4 @@ def group_words_by_length(words: Iterable[str]) -> dict[int, list[str]]:
     Подсказка: отсортируйте по ``len``, затем ``groupby(..., key=len)`` и
     ``list(group)``.
     """
-    raise NotImplementedError
+    return {key: list(group) for key, group in groupby(sorted(words, key=len), key=len)}

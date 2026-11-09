@@ -18,6 +18,7 @@
 """
 
 from __future__ import annotations
+import functools
 
 import operator
 from functools import partial
@@ -42,7 +43,7 @@ def apply_pairs(func: Callable[[int, int], int], pairs: Iterable[tuple[int, int]
 
     Подсказка: ``starmap`` распаковывает кортеж в позиционные аргументы.
     """
-    raise NotImplementedError
+    return list(starmap(func, pairs))
 
 
 def dot_product(left: Iterable[int], right: Iterable[int]) -> int:
@@ -58,7 +59,7 @@ def dot_product(left: Iterable[int], right: Iterable[int]) -> int:
     Подсказка: ``sum(starmap(operator.mul, zip(left, right)))``. Именно
     ``starmap``, а не ``map``: пара из ``zip`` должна стать двумя аргументами.
     """
-    raise NotImplementedError
+    return sum(map(operator.mul, left, right, strict=False))
 
 
 def total_cost(rows: Iterable[tuple[int, int]]) -> int:
@@ -71,7 +72,7 @@ def total_cost(rows: Iterable[tuple[int, int]]) -> int:
     Подсказка: ``sum(starmap(operator.mul, rows))``; каждая строка уже кортеж,
     поэтому ``zip`` не нужен.
     """
-    raise NotImplementedError
+    return sum(starmap(operator.mul, rows))
 
 
 def repeat_apply(func: Callable[[str], str], value: str, times: int) -> list[str]:
@@ -84,7 +85,7 @@ def repeat_apply(func: Callable[[str], str], value: str, times: int) -> list[str
 
     Подсказка: ``map(func, repeat(value, max(times, 0)))``.
     """
-    raise NotImplementedError
+    return list(map(func, repeat(value, max(times, 0))))
 
 
 def pair_with_constant(values: Iterable[str], constant: int) -> list[tuple[str, int]]:
@@ -97,7 +98,7 @@ def pair_with_constant(values: Iterable[str], constant: int) -> list[tuple[str, 
     Подсказка: ``zip(values, repeat(constant))`` — второй поток бесконечен,
     но ``zip`` остановится по первому.
     """
-    raise NotImplementedError
+    return list(zip(values, repeat(constant), strict=False))
 
 
 def apply_all(functions: Iterable[Callable[[int], int]], value: int) -> list[int]:
@@ -110,7 +111,7 @@ def apply_all(functions: Iterable[Callable[[int], int]], value: int) -> list[int
     Подсказка: ``map`` умеет несколько итерируемых аргументов:
     ``map(operator.call, functions, repeat(value))``.
     """
-    raise NotImplementedError
+    return list(map(operator.call, functions, repeat(value)))
 
 
 def make_formatter(unit: str) -> Callable[[int], str]:
@@ -122,7 +123,7 @@ def make_formatter(unit: str) -> Callable[[int], str]:
     Подсказка: ``unit`` у ``_format_measurement`` — именованный (keyword-only)
     аргумент, поэтому фиксировать его нужно по имени: ``unit=unit``.
     """
-    raise NotImplementedError
+    return functools.partial(_format_measurement, unit=unit)
 
 
 def format_values(values: Iterable[int], unit: str) -> list[str]:
@@ -134,4 +135,4 @@ def format_values(values: Iterable[int], unit: str) -> list[str]:
     Подсказка: ``map(make_formatter(unit), values)`` — форматтер готовится
     один раз, а не внутри каждой итерации.
     """
-    raise NotImplementedError
+    return list(map(make_formatter(unit), values))

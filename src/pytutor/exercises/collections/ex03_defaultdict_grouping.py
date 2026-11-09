@@ -48,7 +48,11 @@ def group_by_key(pairs: Iterable[tuple[str, int]]) -> dict[str, list[int]]:
     Подсказка: ``defaultdict(list)`` + ``result[key].append(value)``; в конце
     ``dict(result)``, иначе вернётся ``defaultdict``.
     """
-    raise NotImplementedError
+    res = defaultdict(list)
+    for key, value in pairs:
+        res[key].append(value)
+    return dict(res)
+
 
 
 def group_unique(pairs: Iterable[tuple[str, int]]) -> dict[str, set[int]]:
@@ -62,7 +66,10 @@ def group_unique(pairs: Iterable[tuple[str, int]]) -> dict[str, set[int]]:
     Подсказка: ``defaultdict(set)`` + ``add``. Порядок внутри множества не
     определён, но тест сравнивает множества, а не списки.
     """
-    raise NotImplementedError
+    res = defaultdict(set)
+    for key, value in pairs:
+        res[key].add(value)
+    return dict(res)
 
 
 def index_by_field(records: Iterable[tuple[str, str]], field: int) -> dict[str, list[tuple[str, str]]]:
@@ -80,7 +87,10 @@ def index_by_field(records: Iterable[tuple[str, str]], field: int) -> dict[str, 
 
     Подсказка: ``record[field]`` как ключ, ``record`` целиком — в список.
     """
-    raise NotImplementedError
+    res = defaultdict(list)
+    for record in records:
+        res[record[field]].append(record)
+    return res
 
 
 def invert_mapping(mapping: dict[str, int]) -> dict[int, list[str]]:
@@ -97,7 +107,10 @@ def invert_mapping(mapping: dict[str, int]) -> dict[int, list[str]]:
 
     Подсказка: ``defaultdict(list)`` по ``mapping.items()``.
     """
-    raise NotImplementedError
+    res = defaultdict(list)
+    for value, key in mapping.items():
+        res[key].append(value)
+    return res
 
 
 def group_by_first_letter(words: Iterable[str]) -> dict[str, list[str]]:
@@ -117,4 +130,8 @@ def group_by_first_letter(words: Iterable[str]) -> dict[str, list[str]]:
 
     Подсказка: проверка ``if word:`` до обращения к ``word[0]``.
     """
-    raise NotImplementedError
+    res = defaultdict(list)
+    for word in words:
+        if word:
+            res[word[0]].append(word)
+    return res

@@ -36,7 +36,7 @@ def product(numbers: Iterable[int]) -> int:
     Подсказка: ``reduce(operator.mul, numbers, 1)``. Без третьего аргумента
     пустой вход упал бы с ``TypeError``.
     """
-    raise NotImplementedError
+    return functools.reduce(operator.mul, numbers, 1)
 
 
 def concat_strings(strings: Iterable[str]) -> str:
@@ -49,7 +49,7 @@ def concat_strings(strings: Iterable[str]) -> str:
 
     Подсказка: ``reduce(operator.add, strings, "")``.
     """
-    raise NotImplementedError
+    return functools.reduce(operator.add, strings, "")
 
 
 def sum_with_initial(initial: int, numbers: Iterable[int]) -> int:
@@ -62,7 +62,7 @@ def sum_with_initial(initial: int, numbers: Iterable[int]) -> int:
 
     Подсказка: здесь ``initializer`` — это параметр ``initial``, а не константа.
     """
-    raise NotImplementedError
+    return functools.reduce(operator.add, numbers, initial=initial)
 
 
 def max_or_none(numbers: Iterable[int]) -> int | None:
@@ -78,4 +78,8 @@ def max_or_none(numbers: Iterable[int]) -> int | None:
     свёртки, потому что сравнивать числа с ``None`` нельзя: аккумулятор
     ``None`` означает «пока ничего не накопили».
     """
-    raise NotImplementedError
+    def step(acc: int | None, value: int) -> int:
+        if acc is None:
+            return value
+        return max(acc, value)
+    return functools.reduce(step, numbers, initial=None)

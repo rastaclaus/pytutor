@@ -50,7 +50,7 @@ def point_from_dict(data: dict[str, int]) -> Point:
     Подсказка: ``Point(**data)``. Именно именованные аргументы, а не
     ``Point(*data.values())``: словарь не гарантирует порядок «x, y» по смыслу.
     """
-    raise NotImplementedError
+    return Point(**data)
 
 
 def distance(p1: Point, p2: Point) -> float:
@@ -65,7 +65,7 @@ def distance(p1: Point, p2: Point) -> float:
     сравнивает с ``5.0``, поэтому возвращайте именно ``float`` (корень из
     ``int`` уже даёт ``float``).
     """
-    raise NotImplementedError
+    return ((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2) ** 0.5
 
 
 def shift(point: Point, dx: int, dy: int) -> Point:
@@ -79,7 +79,7 @@ def shift(point: Point, dx: int, dy: int) -> Point:
     заново через ``Point(...)`` можно, но ``_replace`` короче и не зависит от
     порядка полей.
     """
-    raise NotImplementedError
+    return Point(point.x+dx, point.y+dy)
 
 
 def as_serializable(point: Point) -> dict[str, int]:
@@ -91,7 +91,7 @@ def as_serializable(point: Point) -> dict[str, int]:
     Подсказка: ``point._asdict()``. Тест сравнивает с обычным ``dict``, поэтому
     ``dict(point._asdict())`` тоже подойдёт.
     """
-    raise NotImplementedError
+    return point._asdict()
 
 
 def make_students(records: Iterable[tuple[str, int, list[int]]]) -> list[Student]:
@@ -108,7 +108,8 @@ def make_students(records: Iterable[tuple[str, int, list[int]]]) -> list[Student
     Подсказка: списочное включение с распаковкой
     ``for name, year, grades in records`` и ``Student(name, year, grades)``.
     """
-    raise NotImplementedError
+    return [Student(name, year, grades) for name, year, grades in records]
+
 
 
 def class_head(student: Student) -> Student:
@@ -126,4 +127,4 @@ def class_head(student: Student) -> Student:
 
     Подсказка: ``student._replace(year=student.year + 1)``.
     """
-    raise NotImplementedError
+    return student._replace(year=student.year + 1)

@@ -17,7 +17,10 @@
 
 from __future__ import annotations
 
+import functools
 
+
+@functools.lru_cache(maxsize=100)
 def fib(n: int) -> int:
     """Число Фибоначчи: ``fib(0) == 0``, ``fib(1) == 1``.
 
@@ -31,9 +34,15 @@ def fib(n: int) -> int:
 
     Подсказка: наивная рекурсия ``fib(n - 1) + fib(n - 2)`` + ``@cache``.
     """
-    raise NotImplementedError
+    if n < 0:
+        msg = "n must be > 0"
+        raise ValueError(msg)
+    if n <= 1:
+        return n
+    return fib(n - 1) + fib(n - 2)
 
 
+@functools.lru_cache(maxsize=100)
 def catalan(n: int) -> int:
     """Число Каталана: ``C(0) == 1``, ``C(n) == sum(C(i) * C(n - 1 - i))``.
 
@@ -47,4 +56,9 @@ def catalan(n: int) -> int:
     Подсказка: ``sum(catalan(i) * catalan(n - 1 - i) for i in range(n))``
     внутри ``if n == 0: return 1``, плюс ``@cache``.
     """
-    raise NotImplementedError
+    if n < 0:
+        msg = "n must be > 0"
+        raise ValueError(msg)
+    if n <= 1:
+        return 1
+    return sum(catalan(i) * catalan(n - 1 - i) for i in range(n))

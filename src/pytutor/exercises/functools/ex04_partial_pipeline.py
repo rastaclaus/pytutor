@@ -47,7 +47,7 @@ def make_validator(min_len: int = 0, max_len: int | None = None) -> Callable[[st
     ``functools.partial``, чтобы зафиксировать ``min_len`` и ``max_len``
     по имени и оставить свободным только ``text``.
     """
-    raise NotImplementedError
+    return partial(_check_length, min_len=min_len, max_len=max_len)
 
 
 def compose(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
@@ -63,7 +63,9 @@ def compose(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
     Подсказка: соберите через ``reduce``, применяя функции в обратном порядке
     (``reversed(funcs)``), с ``initial`` равным входному значению.
     """
-    raise NotImplementedError
+    def piped(value: Any) -> Any:
+        return reduce(lambda acc, func: func(acc), reversed(funcs), value)
+    return piped
 
 
 def pipeline(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
@@ -77,7 +79,10 @@ def pipeline(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
     последовательности. Функцию-тождество писать не нужно: ``reduce`` без
     элементов вернёт ``initial``, то есть сам вход.
     """
-    raise NotImplementedError
+    def piped(value: Any) -> Any:
+        return reduce(lambda acc, func: func(acc),funcs, value)
+    return piped
+
 
 
 def make_trimmed_validator(min_len: int = 0, max_len: int | None = None) -> Callable[[str], bool]:
@@ -97,7 +102,7 @@ def make_trimmed_validator(min_len: int = 0, max_len: int | None = None) -> Call
     аргумента — выносит вердикт. Здесь ``partial`` и ``reduce`` встречаются:
     подготовленная функция становится шагом конвейера.
     """
-    raise NotImplementedError
+    return pipeline(str.strip, make_validator(min_len=min_len, max_len=max_len))
 
 
 class Logger:
@@ -121,7 +126,9 @@ class Logger:
         Уровень — **именованный** аргумент (после ``*``), поэтому
         ``partialmethod`` должен фиксировать его по имени.
         """
-        raise NotImplementedError
+        msg =  f"{level}: {self.prefix} {message}"
+        self.messages.append(msg)
+        return msg
 
     warn = partialmethod(log, level="WARN")
     debug = partialmethod(log, level="DEBUG")

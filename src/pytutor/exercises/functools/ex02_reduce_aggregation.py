@@ -41,7 +41,11 @@ def flatten(nested: Iterable[Iterable[int]]) -> list[int]:
     Подсказка: ``reduce(lambda acc, part: acc + part, nested, [])``; третий
     аргумент обязателен, иначе пустой вход упадёт.
     """
-    raise NotImplementedError
+    def flat(acc: list[int], numbers: Iterable[int]) -> list[int]:
+        acc.extend(numbers)
+        return acc
+
+    return functools.reduce(flat, nested, [])
 
 
 def count_items(items: Iterable[str]) -> dict[str, int]:
@@ -58,7 +62,10 @@ def count_items(items: Iterable[str]) -> dict[str, int]:
     Подсказка: аккумулятор — ``dict``, который вы мутируете и возвращаете из
     функции-свёртки.
     """
-    raise NotImplementedError
+    def count_item(acc: dict[str, int], item: str) -> dict[str, int]:
+        acc[item] = acc.get(item, 0) + 1
+        return acc
+    return functools.reduce(count_item, items, {})
 
 
 def most_common(items: Iterable[str]) -> str | None:
@@ -74,7 +81,10 @@ def most_common(items: Iterable[str]) -> str | None:
     порядок вставки. ``max`` при равенстве возвращает **первый** подходящий
     элемент, поэтому порядок ключей решает всё.
     """
-    raise NotImplementedError
+    counts = count_items(items)
+    if not counts:
+        return None
+    return max(counts, key=lambda k: counts[k])
 
 
 def group_by(items: Iterable[T], key: Callable[[T], K]) -> dict[K, list[T]]:
@@ -92,4 +102,8 @@ def group_by(items: Iterable[T], key: Callable[[T], K]) -> dict[K, list[T]]:
     Подсказка: ``defaultdict(list)`` как аккумулятор; ключ результата — обычный
     ``dict`` (тест сравнивает с литералом словаря).
     """
-    raise NotImplementedError
+    def put_item(acc: dict[K, list[T]], item: T) -> dict[K, list[T]]:
+        item_key = key(item)
+        acc.setdefault(item_key, []).append(item)
+        return acc
+    return functools.reduce(put_item, items, {})

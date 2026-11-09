@@ -33,6 +33,7 @@ stdlib. Распаковка неверного числа полей даёт `
 
 from __future__ import annotations
 
+from itertools import batched
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -55,7 +56,9 @@ def parse_line(raw: str) -> Record:
     Подсказка: ``level, user, amount = raw.split(",")`` + ``strip()`` у полей +
     ``int(amount)``. Ошибки не оборачивайте в свои — их тексты проверяются.
     """
-    raise NotImplementedError
+    level, user, amount = map(str.strip, raw.split(","))
+    amount = int(amount)
+    return level, user, amount
 
 
 def valid_records(lines: Iterable[str]) -> Iterator[Record]:
@@ -74,7 +77,11 @@ def valid_records(lines: Iterable[str]) -> Iterator[Record]:
     ``except ValueError: continue``. Ловите только ``ValueError`` — других
     ошибок в разборе быть не должно.
     """
-    raise NotImplementedError
+    for line in lines:
+        try:
+            yield parse_line(line)
+        except ValueError:
+            continue
 
 
 def totals_by_user(records: Iterable[Record]) -> Iterator[tuple[str, int]]:
@@ -89,7 +96,8 @@ def totals_by_user(records: Iterable[Record]) -> Iterator[tuple[str, int]]:
     Подсказка: генератор с распаковкой ``for _level, user, amount in records``.
     Это именно генератор, а не список: тест оборачивает результат в ``iter``.
     """
-    raise NotImplementedError
+    for _, user, amount in records:
+        yield user, amount
 
 
 def batch_totals(records: Iterable[Record], size: int) -> list[tuple[int, ...]]:
@@ -105,7 +113,7 @@ def batch_totals(records: Iterable[Record], size: int) -> list[tuple[int, ...]]:
     Подсказка: ``batched(records, size)`` + генераторное выражение внутри
     ``tuple(...)``. Проверку ``size`` не дублируйте — её делает ``batched``.
     """
-    raise NotImplementedError
+    return [tuple(amount for _, _, amount in batch) for batch in batched(records, size, strict=False)]
 
 
 def top_users(lines: Iterable[str], limit: int) -> list[tuple[str, int]]:
@@ -125,7 +133,10 @@ def top_users(lines: Iterable[str], limit: int) -> list[tuple[str, int]]:
     ``totals_by_user(valid_records(lines))``, затем
     ``sorted(items, key=lambda item: (-item[1], item[0]))`` и срез.
     """
-    raise NotImplementedError
+    totals: dict[str, int] = {}
+    for user, amount in totals_by_user(valid_records(lines)):
+        totals[user] = totals.get(user, 0) + amount
+    return sorted(totals.items(), key=lambda item: (-item[1], item[0]))[:limit]
 
 
 def summarise(lines: Iterable[str]) -> tuple[int, int, str | None]:
@@ -140,7 +151,19 @@ def summarise(lines: Iterable[str]) -> tuple[int, int, str | None]:
     Подсказка: ``max(levels.items(), key=lambda item: item[1])`` при обходе
     словаря в порядке появления даёт именно первый из равных.
     """
-    raise NotImplementedError
+    level_counts: dict[str, int] = {}
+    summ = 0
+    count = 0
+    records = valid_records(lines)
+    for record in records:
+        level, _, amount = record
+        count += 1
+        summ += amount
+        level_counts[level] = level_counts.get(level, 0) + 1
+    if not level_counts:
+        return (0, 0, None)
+    most_level = max(level_counts.items(), key=lambda item: item[1])
+    return count, summ, (most_level[0])
 
 
 def process(lines: Iterable[str], batch_size: int) -> list[tuple[int, int]]:
@@ -155,4 +178,6 @@ def process(lines: Iterable[str], batch_size: int) -> list[tuple[int, int]]:
 
     Подсказка: ``enumerate(batched(valid_records(lines), batch_size))``.
     """
-    raise NotImplementedError
+    return [(batch_num, sum(batch)) for batch_num, batch in enumerate(batch_totals(valid_records(lines), batch_size))]
+
+

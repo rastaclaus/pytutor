@@ -17,7 +17,10 @@
 
 from __future__ import annotations
 
+import functools
 
+
+@functools.lru_cache(typed=True)
 def add_typed(a: int, b: int) -> int:
     """Сумма двух чисел; кэш должен различать ``1`` и ``1.0``.
 
@@ -29,9 +32,10 @@ def add_typed(a: int, b: int) -> int:
     Подсказка: ``@lru_cache(maxsize=None, typed=True)``; без ``maxsize``
     декоратор в Python 3.8+ требует явного значения.
     """
-    raise NotImplementedError
+    return a + b
 
 
+@functools.lru_cache(typed=False)
 def add_untyped(a: int, b: int) -> int:
     """Сумма двух чисел; кэш не должен различать ``1`` и ``1.0``.
 
@@ -46,9 +50,10 @@ def add_untyped(a: int, b: int) -> int:
     Подсказка: ``@lru_cache(maxsize=None, typed=False)`` или просто
     ``@cache`` — ``typed`` по умолчанию как раз ``False``.
     """
-    raise NotImplementedError
+    return a + b
 
 
+@functools.lru_cache(maxsize=2)
 def limited(x: int) -> int:
     """Вернуть ``x * x`` с кэшем ровно на 2 элемента.
 
@@ -60,4 +65,4 @@ def limited(x: int) -> int:
 
     Подсказка: ``@lru_cache(maxsize=2)``.
     """
-    raise NotImplementedError
+    return x * x
