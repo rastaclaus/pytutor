@@ -32,6 +32,8 @@ ignore = [
   "D",
   "S",
   "ANN201",
+  "ANN001",
+  "ANN202",
   "PLR2004",
   "SLF",
   "INP001",

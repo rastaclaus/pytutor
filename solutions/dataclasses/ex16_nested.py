@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 
 def declare_order() -> tuple[type, type]:
@@ -50,3 +50,15 @@ def default_items_are_independent() -> bool:
     first = order_cls("a")
     second = order_cls("b")
     return first.items is not second.items
+
+
+def deep_replace(order: object, sku: str, **changes: float) -> object:
+    """Бонус: новый заказ с изменённой позицией."""
+    _item_cls, order_cls = declare_order()
+    old_item = next(item for item in order.items if item.sku == sku)  # type: ignore[attr-defined]
+    new_item = replace(old_item, **changes)
+    new_items = [
+        new_item if item.sku == sku else item
+        for item in order.items  # type: ignore[attr-defined]
+    ]
+    return order_cls(order.order_id, new_items)  # type: ignore[attr-defined]
