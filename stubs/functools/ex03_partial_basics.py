@@ -7,6 +7,9 @@
 Функция ``format_currency`` уже реализована — она пригодится как готовая основа
 для ``make_price_formatter``.
 
+Сценарий: касса магазина — для каждой строки чека «приготовить» функцию
+с уже вбитой валютой и точностью, чтобы потом просто передавать ей цену.
+
 Важно: результат ``partial`` — объект типа ``functools.partial``, и тест это
 проверяет. Поэтому ``lambda`` в ``make_multiplier`` не подойдёт, а аргументы,
 которые нужно зафиксировать по имени, фиксируйте по имени (``decimals=decimals``).
@@ -34,8 +37,8 @@ def make_multiplier(factor: int) -> Callable[[int], int]:
     ``make_multiplier(3)(0)`` -> ``0``;
     ``type(make_multiplier(2))`` — ``functools.partial``.
 
-    Подсказка: ``partial(operator.mul, factor)`` — тогда свободным остаётся
-    второй аргумент, то есть множимое.
+    Подсказка: зафиксируйте множитель **первым позиционным** аргументом —
+    тогда свободным останется множимое.
     """
     raise NotImplementedError
 
@@ -47,10 +50,9 @@ def make_power(exp: int) -> Callable[[int], int]:
     ``make_power(3)(2)`` -> ``8``;
     ``make_power(2)(0)`` -> ``0``.
 
-    Подсказка: у ``pow`` параметры называются ``base`` и ``exp``, поэтому
-    фиксируйте степень по имени: ``partial(pow, exp=exp)``. Позиционная форма
-    ``partial(pow, exp)`` зафиксировала бы основание, и результат был бы
-    ``exp ** x``.
+    Подсказка: у ``pow`` параметры называются ``base`` и ``exp``. Подумайте,
+    какой из них нужно закрепить и можно ли это сделать позиционно: результат
+    должен быть ``base ** exp``, а не ``exp ** base``.
     """
     raise NotImplementedError
 
@@ -64,8 +66,8 @@ def add_all(numbers: Iterable[int], amount: int) -> list[int]:
 
     Реализуйте через ``map`` и ``functools.partial`` (без лямбд).
 
-    Подсказка: ``map(partial(operator.add, amount), numbers)``. Результат
-    ``map`` нужно материализовать в список.
+    Подсказка: сложение коммутативно, поэтому неважно, какой аргумент
+    закрепить позиционно; результат ``map`` нужно материализовать в список.
     """
     raise NotImplementedError
 
@@ -78,7 +80,7 @@ def make_price_formatter(currency: str, decimals: int = 2) -> Callable[[float], 
     равен 2;
     ``make_price_formatter("€", 0)(2.4)`` -> ``"2 €"``.
 
-    Подсказка: ``partial(format_currency, currency=currency, decimals=decimals)``;
-    свободным остаётся первый параметр ``value``.
+    Подсказка: ``format_currency`` принимает ``value`` первым позиционным
+    аргументом, поэтому валюту и точность удобно закрепить по имени.
     """
     raise NotImplementedError

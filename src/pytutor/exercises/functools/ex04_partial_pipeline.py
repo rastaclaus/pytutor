@@ -13,6 +13,10 @@
 
 Именно поэтому тема собрана в одном упражнении: сначала функция «готовится»,
 потом встраивается в конвейер, а для методов используется родственный приём.
+
+Сценарий: валидация полей формы регистрации и структурный лог приложения —
+валидатор подгоняется под сигнатуру конвейера, а лог пишет через один метод
+с разными уровнями.
 """
 
 from __future__ import annotations
@@ -47,7 +51,7 @@ def make_validator(min_len: int = 0, max_len: int | None = None) -> Callable[[st
     ``functools.partial``, чтобы зафиксировать ``min_len`` и ``max_len``
     по имени и оставить свободным только ``text``.
     """
-    return partial(_check_length, min_len=min_len, max_len=max_len)
+    raise NotImplementedError
 
 
 def compose(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
@@ -63,9 +67,7 @@ def compose(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
     Подсказка: соберите через ``reduce``, применяя функции в обратном порядке
     (``reversed(funcs)``), с ``initial`` равным входному значению.
     """
-    def piped(value: Any) -> Any:
-        return reduce(lambda acc, func: func(acc), reversed(funcs), value)
-    return piped
+    raise NotImplementedError
 
 
 def pipeline(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
@@ -79,10 +81,7 @@ def pipeline(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
     последовательности. Функцию-тождество писать не нужно: ``reduce`` без
     элементов вернёт ``initial``, то есть сам вход.
     """
-    def piped(value: Any) -> Any:
-        return reduce(lambda acc, func: func(acc),funcs, value)
-    return piped
-
+    raise NotImplementedError
 
 
 def make_trimmed_validator(min_len: int = 0, max_len: int | None = None) -> Callable[[str], bool]:
@@ -102,7 +101,7 @@ def make_trimmed_validator(min_len: int = 0, max_len: int | None = None) -> Call
     аргумента — выносит вердикт. Здесь ``partial`` и ``reduce`` встречаются:
     подготовленная функция становится шагом конвейера.
     """
-    return pipeline(str.strip, make_validator(min_len=min_len, max_len=max_len))
+    raise NotImplementedError
 
 
 class Logger:
@@ -126,9 +125,7 @@ class Logger:
         Уровень — **именованный** аргумент (после ``*``), поэтому
         ``partialmethod`` должен фиксировать его по имени.
         """
-        msg =  f"{level}: {self.prefix} {message}"
-        self.messages.append(msg)
-        return msg
+        raise NotImplementedError
 
     warn = partialmethod(log, level="WARN")
     debug = partialmethod(log, level="DEBUG")

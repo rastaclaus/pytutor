@@ -43,7 +43,7 @@ def batch(items: Iterable[str], size: int) -> list[tuple[str, ...]]:
 
     Подсказка: ``list(batched(items, size))``.
     """
-    return list(batched(items, size, strict=False))
+    raise NotImplementedError
 
 
 def batch_strict(items: Iterable[str], size: int) -> list[tuple[str, ...]]:

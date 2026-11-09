@@ -18,8 +18,7 @@
 
 from __future__ import annotations
 
-from collections import deque
-from itertools import filterfalse, islice, tee
+from itertools import tee
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -40,8 +39,7 @@ def duplicate(values: Iterable[int]) -> tuple[list[int], list[int]]:
     Подсказка: ``left, right = tee(values, 2)``, затем два ``list(...)``.
     Не делайте ``list(values)`` дважды — второй проход по итератору будет пуст.
     """
-    first, second = tee(values)
-    return list(first), list(second)
+    raise NotImplementedError
 
 
 def peek(values: Iterable[str]) -> tuple[str | None, list[str]]:
@@ -56,8 +54,7 @@ def peek(values: Iterable[str]) -> tuple[str | None, list[str]]:
     ``next(iter(first), None)`` (``default=None`` обязателен для пустого входа),
     а второй список стройте из ``rest`` — он ещё не сдвинут.
     """
-    first, rest = tee(values, 2)
-    return next(first, None), list(rest)
+    raise NotImplementedError
 
 
 def split_by_predicate(values: Iterable[int], predicate: Callable[[int], bool]) -> tuple[list[int], list[int]]:
@@ -74,8 +71,7 @@ def split_by_predicate(values: Iterable[int], predicate: Callable[[int], bool]) 
     предикат дважды на элемент и не превращайте вход в список ради второго
     прохода.
     """
-    accepted, not_accepted = tee(values, 2)
-    return list(filter(predicate, accepted)), list(filterfalse(predicate, not_accepted))
+    raise NotImplementedError
 
 
 def count_calls_once(values: Iterable[int]) -> tuple[int, int]:
@@ -90,8 +86,7 @@ def count_calls_once(values: Iterable[int]) -> tuple[int, int]:
     Подсказка: ``first, second = tee(values, 2)``; ``sum(first)`` и
     ``sum(1 for _ in second)``.
     """
-    values_sum, values_count = tee(values, 2)
-    return (sum(values_sum), sum(1 for _ in values_count))
+    raise NotImplementedError
 
 
 def first_and_last(values: Iterable[int]) -> tuple[int, int] | None:
@@ -105,12 +100,7 @@ def first_and_last(values: Iterable[int]) -> tuple[int, int] | None:
     Вход может быть генератором — материализовать его целиком нельзя.
     Подсказка: одна копия — на первый элемент, вторая — на «хвост».
     """
-    first, last  = tee(values, 2)
-    first_item = next(first, None)
-    if first_item is None:
-        return first_item
-    last_item = deque(last, maxlen=1)[0]
-    return first_item, last_item
+    raise NotImplementedError
 
 
 def lookahead_pairs(values: Iterable[int]) -> list[tuple[int, int | None]]:
@@ -126,8 +116,4 @@ def lookahead_pairs(values: Iterable[int]) -> list[tuple[int, int | None]]:
     на один (``next(following, None)``), затем стройте пары
     ``(value, next(following, None))`` в обход ``current``.
     """
-    current, following = tee(values, 2)
-    _ = next(following, None)
-    return [(value, next(following, None)) for value in current]
-
-
+    raise NotImplementedError

@@ -37,7 +37,7 @@ def take_until_negative(values: Iterable[int]) -> list[int]:
 
     Подсказка: ``takewhile(lambda value: value >= 0, values)``.
     """
-    return list(takewhile(lambda value: value >= 0, values))
+    raise NotImplementedError
 
 
 def skip_leading_zeros(values: Iterable[int]) -> list[int]:
@@ -50,7 +50,7 @@ def skip_leading_zeros(values: Iterable[int]) -> list[int]:
 
     Подсказка: ``dropwhile(lambda value: value == 0, values)``.
     """
-    return list(dropwhile(lambda value: value==0, values))
+    raise NotImplementedError
 
 
 def odd_numbers(values: Iterable[int]) -> list[int]:
@@ -63,7 +63,7 @@ def odd_numbers(values: Iterable[int]) -> list[int]:
     Подсказка: ``filterfalse(lambda value: value % 2 == 0, values)`` —
     отбрасываем чётные, оставшееся и есть нечётные.
     """
-    return list(filterfalse(lambda x: x%2 == 0, values))
+    raise NotImplementedError
 
 
 def falsey_only(values: Iterable[int | None]) -> list[int | None]:
@@ -76,7 +76,7 @@ def falsey_only(values: Iterable[int | None]) -> list[int | None]:
     Подсказка: ``filterfalse(None, values)`` — ``None`` вместо предиката берёт
     саму истинность значения, а ``filterfalse`` оставляет ложные.
     """
-    return list(filterfalse(None, values))
+    raise NotImplementedError
 
 
 def select_by_mask(data: Iterable[str], mask: Iterable[bool]) -> list[str]:
@@ -91,7 +91,7 @@ def select_by_mask(data: Iterable[str], mask: Iterable[bool]) -> list[str]:
 
     Подсказка: ``compress(data, mask)`` останавливается по любому короткому входу.
     """
-    return list(compress(data, mask))
+    raise NotImplementedError
 
 
 def drop_while_shorter_than(limit: int, words: Iterable[str]) -> list[str]:
@@ -105,7 +105,7 @@ def drop_while_shorter_than(limit: int, words: Iterable[str]) -> list[str]:
 
     Подсказка: ``dropwhile(lambda word: len(word) < limit, words)``.
     """
-    return list(dropwhile(lambda word: len(word) < limit, words))
+    raise NotImplementedError
 
 
 def count_taken(predicate: Callable[[int], bool], values: Iterable[int]) -> int:
@@ -120,4 +120,4 @@ def count_taken(predicate: Callable[[int], bool], values: Iterable[int]) -> int:
 
     Подсказка: ``sum(1 for _ in takewhile(predicate, values))``.
     """
-    return sum(1 for _ in takewhile(predicate, values))
+    raise NotImplementedError

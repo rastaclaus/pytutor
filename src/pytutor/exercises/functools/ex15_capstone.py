@@ -20,7 +20,6 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from functools import cache, partial, reduce, wraps
 from typing import Any, TypeVar
 
 F = TypeVar("F", bound=Callable[..., Any])
@@ -37,21 +36,7 @@ def retry(times: int, exceptions: tuple[type[BaseException], ...] = (Exception,)
 
     Подсказка: тело можно позаимствовать из упражнения 6 — логика та же.
     """
-    if times < 1:
-        msg = "times must be => 1"
-        raise ValueError(msg)
-    def decorator(func: F) -> Callable[[F], F]:
-        @wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
-            last: BaseException
-            for _ in range(times):
-                try:
-                    return func(*args, **kwargs)
-                except exceptions as err:
-                    last = err
-            raise last
-        return wrapper
-    return decorator
+    raise NotImplementedError
 
 
 def pipeline(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
@@ -63,13 +48,9 @@ def pipeline(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
 
     Подсказка: ``reduce`` с ``initial`` равным входу — как в упражнении 4.
     """
-    def piped(value: Any) -> Callable[[Any], Any]:
-        return reduce(lambda acc, func: func(acc), funcs, value)
-    return piped
+    raise NotImplementedError
 
 
-
-@cache
 def parse_measurement(raw: str) -> int:
     """Преобразовать строку в целое (``int(raw.strip())``) и закэшировать результат.
 
@@ -83,7 +64,7 @@ def parse_measurement(raw: str) -> int:
 
     Подсказка: ``@cache`` над функцией, внутри — ``int(raw.strip())``.
     """
-    return pipeline(str.strip, int)(raw)
+    raise NotImplementedError
 
 
 def _scaled(value: int, *, factor: int, offset: int) -> int:
@@ -101,7 +82,7 @@ def make_scaler(factor: int, offset: int = 0) -> Callable[[int], int]:
     Подсказка: ``factor`` и ``offset`` у ``_scaled`` — именованные аргументы,
     поэтому ``partial(_scaled, factor=factor, offset=offset)``.
     """
-    return partial(_scaled, factor=factor, offset=offset)
+    raise NotImplementedError
 
 
 def scale_value(row: dict[str, Any], scaler: Callable[[int], int]) -> dict[str, Any]:
@@ -116,7 +97,7 @@ def scale_value(row: dict[str, Any], scaler: Callable[[int], int]) -> dict[str, 
     Подсказка: ``{**row, "value": scaler(row["value"])}`` — новый словарь без
     мутации входа.
     """
-    return {**row, "value": scaler(row["value"])}
+    raise NotImplementedError
 
 
 def aggregate_by_category(rows: list[dict[str, Any]]) -> dict[str, int]:
@@ -131,9 +112,4 @@ def aggregate_by_category(rows: list[dict[str, Any]]) -> dict[str, int]:
     Подсказка: ``reduce`` с ``initial={}`` и функцией, которая мутирует
     аккумулятор и возвращает его.
     """
-    def group_by(acc: dict[str, int], row: dict[str, Any]) -> dict[str, int]:
-        cat, value = row["cat"], row["value"]
-        acc[cat] = acc.get(cat, 0) + value
-        return acc
-
-    return reduce(group_by, rows, {})
+    raise NotImplementedError

@@ -44,9 +44,7 @@ def take(n: int, iterable: Iterable[int]) -> list[int]:
     Подсказка: ``islice``, а не срез; для ``n <= 0`` верните пустой список
     сразу, иначе ``islice`` получит отрицательный ``stop`` и упадёт.
     """
-    if n < 1:
-        return []
-    return list(islice(iterable, n))
+    raise NotImplementedError
 
 
 def countdown(start: int, n: int) -> list[int]:
@@ -58,9 +56,7 @@ def countdown(start: int, n: int) -> list[int]:
 
     Подсказка: ``count`` умеет и отрицательный шаг.
     """
-    if n < 1:
-        return []
-    return list(islice(count(start, -1), n))
+    raise NotImplementedError
 
 
 def repeat_value(value: str, times: int) -> list[str]:
@@ -71,9 +67,7 @@ def repeat_value(value: str, times: int) -> list[str]:
     ``repeat_value("x", -1)`` -> ``[]`` — отрицательное число повторов
     трактуется как ноль (``repeat`` сам бросил бы ``ValueError``).
     """
-    if times < 1:
-        return []
-    return list(repeat(value, times=times))
+    raise NotImplementedError
 
 
 def cycle_values(values: list[str], n: int) -> list[str]:
@@ -87,7 +81,7 @@ def cycle_values(values: list[str], n: int) -> list[str]:
     Внимание: ``cycle`` по пустому входу не зависает, и ``islice`` от него
     тоже завершится — отдельная проверка на пустоту не нужна.
     """
-    return list(islice(cycle(values), n))
+    raise NotImplementedError
 
 
 def numbered(items: Iterable[str]) -> list[tuple[int, str]]:
@@ -101,4 +95,4 @@ def numbered(items: Iterable[str]) -> list[tuple[int, str]]:
     Подсказка: ``zip(count(), items)``. Длины здесь не сравниваются, поэтому
     ``strict`` не нужен: ``zip`` сам остановится по короткому входу.
     """
-    return list(zip(count(), items, strict=False))
+    raise NotImplementedError

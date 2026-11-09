@@ -39,7 +39,7 @@ def flatten(nested: Iterable[Iterable[int]]) -> list[int]:
     Подсказка: ``chain.from_iterable`` (а не ``chain``, который принял бы
     единственный список и выдал бы его элементы-списки).
     """
-    return list(chain.from_iterable(nested))
+    raise NotImplementedError
 
 
 def concat(*iterables: Iterable[str]) -> list[str]:
@@ -53,7 +53,7 @@ def concat(*iterables: Iterable[str]) -> list[str]:
     Подсказка: здесь нужен именно ``chain(*iterables)``: аргументы уже
     перечислены по отдельности.
     """
-    return list(chain(*iterables))
+    raise NotImplementedError
 
 
 def words_of(lines: Iterable[str]) -> list[str]:
@@ -67,7 +67,7 @@ def words_of(lines: Iterable[str]) -> list[str]:
     промежутки и отбрасывает пустые куски, поэтому дополнительная фильтрация
     не нужна: ``chain.from_iterable(line.split() for line in lines)``.
     """
-    return list(chain.from_iterable(line.split() for line in lines))
+    raise NotImplementedError
 
 
 def take_flattened(nested: Iterable[Iterable[int]], n: int) -> list[int]:
@@ -85,4 +85,4 @@ def take_flattened(nested: Iterable[Iterable[int]], n: int) -> list[int]:
     Подсказка: ``islice(chain.from_iterable(nested), n)``. Не перехватывайте
     ``ValueError`` от ``islice`` — тест проверяет именно stdlib-текст.
     """
-    return list(islice(chain.from_iterable(nested), n))
+    raise NotImplementedError

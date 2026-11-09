@@ -36,9 +36,7 @@ class Version:
         Подсказка: сравнение кортежей ``parts`` уже умеет всё, что нужно, но
         сначала проверьте ``isinstance(other, Version)``.
         """
-        if not isinstance(other, Version):
-            return NotImplemented
-        return self.parts == other.parts
+        raise NotImplementedError
 
     def __lt__(self, other: object) -> bool:
         """Сравнение «меньше» по ``parts``; иначе ``NotImplemented``.
@@ -51,9 +49,7 @@ class Version:
 
         Подсказка: ``return self.parts < other.parts`` после проверки типа.
         """
-        if not isinstance(other, Version):
-            return NotImplemented
-        return self.parts < other.parts
+        raise NotImplementedError
 
     def __repr__(self) -> str:
         """Вернуть строку вида ``"Version(1, 2, 0)"``.
@@ -63,4 +59,4 @@ class Version:
 
         Подсказка: ``", ".join(map(str, self.parts))`` внутри ``f"Version(...)"``.
         """
-        return f"Version{self.parts}"
+        raise NotImplementedError

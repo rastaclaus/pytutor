@@ -46,7 +46,7 @@ def count_characters(text: str) -> Counter[str]:
     Подсказка: ``Counter`` сам разбирает строку на символы, отдельный цикл не
     нужен.
     """
-    return Counter(text)
+    raise NotImplementedError
 
 
 def count_words(words: Iterable[str]) -> Counter[str]:
@@ -59,7 +59,7 @@ def count_words(words: Iterable[str]) -> Counter[str]:
 
     Подсказка: ``Counter`` принимает любое итерируемое, включая генератор.
     """
-    return Counter(words)
+    raise NotImplementedError
 
 
 def most_common_items(counter: Counter[str], n: int) -> list[tuple[str, int]]:
@@ -77,10 +77,7 @@ def most_common_items(counter: Counter[str], n: int) -> list[tuple[str, int]]:
     Подсказка: проверка ``n < 0`` + один вызов ``counter.most_common(n)``.
     Порядок при равных частотах здесь не задан — это тема упражнения 10.
     """
-    if n < 1:
-        msg = "n must be positive"
-        raise ValueError(msg)
-    return counter.most_common(n)
+    raise NotImplementedError
 
 
 def total_count(counter: Counter[str]) -> int:
@@ -95,7 +92,7 @@ def total_count(counter: Counter[str]) -> int:
     Подсказка: ``counter.total()`` — метод, появившийся в Python 3.10; ручной
     ``sum`` не требуется.
     """
-    return counter.total()
+    raise NotImplementedError
 
 
 def unique_items(counter: Counter[str]) -> list[str]:
@@ -112,7 +109,7 @@ def unique_items(counter: Counter[str]) -> list[str]:
     Подсказка: ``[key for key, count in counter.items() if count > 0]``.
     ``list(counter)`` не подойдёт: оно вернёт и нулевые ключи.
     """
-    return [key for key in counter if counter[key]>0]
+    raise NotImplementedError
 
 
 def expand(counter: Counter[str]) -> list[str]:
@@ -129,4 +126,4 @@ def expand(counter: Counter[str]) -> list[str]:
     Подсказка: ``list(counter.elements())``. Ручной ``for`` с ``extend`` даст
     тот же результат, но метод короче.
     """
-    return list(counter.elements())
+    raise NotImplementedError

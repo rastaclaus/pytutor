@@ -7,6 +7,10 @@
 
 Реализуйте все функции через ``functools.reduce``.
 
+Сценарий: чек корзины интернет-магазина — перемножить множители скидки,
+склеить части артикула, посчитать итог с бонусного баланса и найти самую
+дорогую позицию.
+
 Подсказка: модуль ``operator`` даёт готовые ``operator.add`` и ``operator.mul``.
 
 Главное правило набора: ``reduce`` **без** ``initializer`` на пустом входе
@@ -33,10 +37,11 @@ def product(numbers: Iterable[int]) -> int:
     ``initializer``;
     ``product([2, 0, 4])`` -> ``0``.
 
-    Подсказка: ``reduce(operator.mul, numbers, 1)``. Без третьего аргумента
-    пустой вход упал бы с ``TypeError``.
+    Подсказка: подумайте, какое число не меняет произведение, — оно и станет
+    ``initializer`` (без него пустой вход упал бы с ``TypeError``). Готовую
+    функцию умножения возьмите из ``operator``.
     """
-    return functools.reduce(operator.mul, numbers, 1)
+    raise NotImplementedError
 
 
 def concat_strings(strings: Iterable[str]) -> str:
@@ -47,9 +52,10 @@ def concat_strings(strings: Iterable[str]) -> str:
     ``concat_strings([])`` -> ``""`` — пустая последовательность даёт пустую
     строку.
 
-    Подсказка: ``reduce(operator.add, strings, "")``.
+    Подсказка: нейтральный элемент для склейки строк — пустая строка,
+    операцию сложения даёт ``operator.add``.
     """
-    return functools.reduce(operator.add, strings, "")
+    raise NotImplementedError
 
 
 def sum_with_initial(initial: int, numbers: Iterable[int]) -> int:
@@ -62,7 +68,7 @@ def sum_with_initial(initial: int, numbers: Iterable[int]) -> int:
 
     Подсказка: здесь ``initializer`` — это параметр ``initial``, а не константа.
     """
-    return functools.reduce(operator.add, numbers, initial=initial)
+    raise NotImplementedError
 
 
 def max_or_none(numbers: Iterable[int]) -> int | None:
@@ -78,8 +84,4 @@ def max_or_none(numbers: Iterable[int]) -> int | None:
     свёртки, потому что сравнивать числа с ``None`` нельзя: аккумулятор
     ``None`` означает «пока ничего не накопили».
     """
-    def step(acc: int | None, value: int) -> int:
-        if acc is None:
-            return value
-        return max(acc, value)
-    return functools.reduce(step, numbers, initial=None)
+    raise NotImplementedError

@@ -28,7 +28,7 @@
 from __future__ import annotations
 
 from collections import deque
-from itertools import accumulate, count, islice, tee, repeat
+from itertools import accumulate, count, islice, tee
 from math import sumprod
 from operator import truediv
 from typing import TYPE_CHECKING
@@ -48,16 +48,7 @@ def sliding_window(values: Iterable[int], size: int) -> list[tuple[int, ...]]:
     Подсказка: рецепт на ``deque(maxlen=size)``; первые ``size - 1`` элементов
     надо забрать заранее через ``islice``, иначе первое окно окажется неполным.
     """
-    if size < 1:
-        msg = "size must greather than one"
-        raise ValueError(msg)
-    res = []
-    window = deque(maxlen=size)
-    for item in values:
-        window.append(item)
-        if len(window) == size:
-            res.append(tuple(window))
-    return res
+    raise NotImplementedError
 
 
 def running_mean(values: Iterable[int]) -> list[float]:
@@ -69,11 +60,10 @@ def running_mean(values: Iterable[int]) -> list[float]:
     Подсказка: ``accumulate`` — бегущая сумма, ``count(1)`` — бегущий
     знаменатель, ``map(truediv, ...)`` делит одно на другое лениво.
     """
-    return list(map(truediv, accumulate(values), count(1)))
+    raise NotImplementedError
 
 
-
-def sum_of_squares(values: Iterable[int]) -> int | float:
+def sum_of_squares(values: Iterable[int]) -> int:
     """Сумма квадратов всех элементов, без промежуточного списка.
 
     ``sum_of_squares([1, 2, 3])`` -> ``14`` (1 + 4 + 9);
@@ -82,7 +72,7 @@ def sum_of_squares(values: Iterable[int]) -> int | float:
     Подсказка: ``sumprod(a, b)`` — скалярное произведение; две копии одного
     потока (``tee``) дают вектор, умноженный сам на себя.
     """
-    return sumprod(*tee(values, 2))
+    raise NotImplementedError
 
 
 def tail(values: Iterable[int], size: int) -> list[int]:
@@ -95,7 +85,7 @@ def tail(values: Iterable[int], size: int) -> list[int]:
     Вход целиком материализовать нельзя: решение должно работать и на
     бесконечном потоке. Подсказка: ``deque(values, maxlen=size)``.
     """
-    return list(deque(values, maxlen=size))
+    raise NotImplementedError
 
 
 def running_extremes(values: Iterable[int]) -> list[tuple[int, int]]:
@@ -116,8 +106,7 @@ def running_extremes(values: Iterable[int]) -> list[tuple[int, int]]:
     Подсказка: ``accumulate(values, min)`` и ``accumulate(values, max)`` дают
     два бегущих ряда, ``zip(..., strict=True)`` склеивает их в пары.
     """
-    first, second = tee(values, 2)
-    return list(zip(accumulate(first, min), accumulate(second, max),  strict=True))
+    raise NotImplementedError
 
 
 def average_of_top(values: Iterable[int], size: int) -> float:
@@ -129,13 +118,7 @@ def average_of_top(values: Iterable[int], size: int) -> float:
 
     Подсказка: переиспользуйте ``tail``.
     """
-    if size < 1:
-        msg = "size must be >= 1"
-        raise ValueError(msg)
-    last = tail(values, size=size)
-    if len(last) == 0:
-        raise ValueError("пустой")
-    return sum(last) / len(last)
+    raise NotImplementedError
 
 
 def moving_average(values: Iterable[float], size: int) -> list[float]:
@@ -148,4 +131,4 @@ def moving_average(values: Iterable[float], size: int) -> list[float]:
     Подсказка: переиспользуйте ``sliding_window`` и делите сумму окна на
     ``size``; ``size <= 0`` отсекается внутри ``sliding_window``.
     """
-    return [sum(window) / size for window in sliding_window(values, size)]
+    raise NotImplementedError

@@ -35,12 +35,10 @@ class Formatter:
 
         Подсказка: ``return f"?{value}"`` — без ``!r``.
         """
-        return f"?{value}"
-    @render.register
-    def _(self, value: int) -> str:
-        return f"int:{value}"
+        raise NotImplementedError
 
-
-    @render.register
-    def _(self, value: str) -> str:
-        return f"str:{value!r}"
+    # TODO: зарегистрируйте обработчики int и str через @render.register.
+    # Обработчики — обычные методы с `self` и аннотированным вторым аргументом:
+    #   @render.register
+    #   def _(self, value: int) -> str:
+    #       ...

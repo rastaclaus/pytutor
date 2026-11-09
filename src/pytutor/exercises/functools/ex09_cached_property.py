@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from functools import cached_property
-
 
 class HeavyValue:
     """Хранит ``base`` и (лениво) его квадрат в ``value``."""
@@ -25,7 +23,6 @@ class HeavyValue:
         self.base = base
         self.computations = 0
 
-    @cached_property
     def value(self) -> int:
         """Вернуть ``base ** 2``, посчитав его лишь однажды.
 
@@ -41,5 +38,4 @@ class HeavyValue:
         Подсказка: снимите скобки у ``def value(self)`` (``cached_property``
         заменяет метод дескриптором) и добавьте ``@cached_property``.
         """
-        self.computations += 1
-        return self.base ** 2
+        raise NotImplementedError

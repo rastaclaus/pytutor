@@ -13,6 +13,10 @@
 
 Оба декоратора должны честно пробрасывать аргументы: ``identity_decorator``
 принимает ``*args, **kwargs`` и вызывает ``func(*args, **kwargs)``.
+
+Сценарий: вы написали библиотечную функцию ``measure_time`` и заметили, что
+после оборачивания отладчик и документация показывают вместо ``sample``
+безликий ``wrapper``. Это упражнение воспроизводит багу и её починку.
 """
 
 from __future__ import annotations
@@ -42,10 +46,7 @@ def identity_decorator(func: Callable[..., Any]) -> Callable[..., Any]:
     Подсказка: определите внутри ``wrapper(*args, **kwargs)`` и верните его,
     **не** вызывая ``wraps``.
     """
-    def wrapper(*args: Any, **kwargs: Any) -> Callable[..., Any]:
-        return func(*args, **kwargs)
-
-    return wrapper
+    raise NotImplementedError
 
 
 def preserving_decorator[**P, R](func: Callable[P, R]) -> Callable[P, R]:
@@ -60,8 +61,4 @@ def preserving_decorator[**P, R](func: Callable[P, R]) -> Callable[P, R]:
     Подсказка: тот же ``wrapper``, но с ``@wraps(func)``. ``__wrapped__`` и
     подпись появляются автоматически — вручную их копировать не надо.
     """
-    @wraps(func)
-    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
-        return func(*args, **kwargs)
-
-    return wrapper
+    raise NotImplementedError

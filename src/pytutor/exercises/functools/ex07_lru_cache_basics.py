@@ -13,14 +13,14 @@
 ``@cache`` пишется над ``def fib(...)``, а не навешивается внутри тела.
 Именно поэтому у результата появляются ``cache_info()`` и ``cache_clear()`` —
 их вызывает тест.
+
+Сценарий: вычисление цены опциона и подсчёт дорожной сетки — оба считаются
+рекурсией с повторными вызовами, без кэша оба «взрываются» по времени.
 """
 
 from __future__ import annotations
 
-import functools
 
-
-@functools.lru_cache(maxsize=100)
 def fib(n: int) -> int:
     """Число Фибоначчи: ``fib(0) == 0``, ``fib(1) == 1``.
 
@@ -32,17 +32,11 @@ def fib(n: int) -> int:
     ``0..20``: рекурсия заходит в ``fib(0)`` и ``fib(1)``, поэтому промахов
     ровно 21, а не 1.
 
-    Подсказка: наивная рекурсия ``fib(n - 1) + fib(n - 2)`` + ``@cache``.
+    Подсказка: наивная рекурсия с двумя самовызовами плюс ``@cache``.
     """
-    if n < 0:
-        msg = "n must be > 0"
-        raise ValueError(msg)
-    if n <= 1:
-        return n
-    return fib(n - 1) + fib(n - 2)
+    raise NotImplementedError
 
 
-@functools.lru_cache(maxsize=100)
 def catalan(n: int) -> int:
     """Число Каталана: ``C(0) == 1``, ``C(n) == sum(C(i) * C(n - 1 - i))``.
 
@@ -56,9 +50,4 @@ def catalan(n: int) -> int:
     Подсказка: ``sum(catalan(i) * catalan(n - 1 - i) for i in range(n))``
     внутри ``if n == 0: return 1``, плюс ``@cache``.
     """
-    if n < 0:
-        msg = "n must be > 0"
-        raise ValueError(msg)
-    if n <= 1:
-        return 1
-    return sum(catalan(i) * catalan(n - 1 - i) for i in range(n))
+    raise NotImplementedError

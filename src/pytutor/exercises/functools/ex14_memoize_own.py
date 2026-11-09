@@ -21,9 +21,7 @@
 
 from __future__ import annotations
 
-import inspect
 from collections.abc import Callable
-from functools import wraps
 from typing import Any, TypeVar
 
 F = TypeVar("F", bound=Callable[..., Any])
@@ -48,18 +46,4 @@ def memoize(func: F) -> F:
     хэшируемый и независимый от порядка записи ключ. Не забудьте
     ``wrapper.cache`` и ``wrapper.cache_clear`` (атрибуты на функции).
     """
-    sign = inspect.signature(func)
-    _cache = {}
-
-    @wraps(func)
-    def wrapper(*args: Any, **kwargs: Any) -> Any:
-        bound = sign.bind(*args, **kwargs)
-        bound.apply_defaults()
-        key = tuple(sorted(bound.arguments.items()))
-        if key not in _cache:
-            _cache[key] = func(*args, **kwargs)
-        return _cache[key]
-
-    wrapper.cache = _cache  # ty: ignore[unresolved-attribute]
-    wrapper.cache_clear  = _cache.clear  # ty: ignore[unresolved-attribute]
-    return wrapper
+    raise NotImplementedError

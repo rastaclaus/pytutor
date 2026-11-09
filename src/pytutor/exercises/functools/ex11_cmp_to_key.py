@@ -18,7 +18,6 @@
 """
 
 from __future__ import annotations
-import re
 
 from functools import cmp_to_key
 
@@ -33,8 +32,7 @@ def compare_by_absolute(a: int, b: int) -> int:
     Подсказка: сравните ``abs(a)`` и ``abs(b)`` и верните ``-1``/``0``/``1``
     явно. ``(abs(a) > abs(b)) - (abs(a) < abs(b))`` — короткий способ.
     """
-    x, y = abs(a), abs(b)
-    return (x > y) - (x < y)
+    raise NotImplementedError
 
 
 def sort_by_absolute(values: list[int]) -> list[int]:
@@ -47,11 +45,7 @@ def sort_by_absolute(values: list[int]) -> list[int]:
 
     Подсказка: ``sorted(values, key=cmp_to_key(compare_by_absolute))``.
     """
-    return sorted(values, key=cmp_to_key(compare_by_absolute))
-
-
-def _split_natural(line: str) -> list[str | int]:
-    return [int(part) if part.isdigit() else part for part in re.split(r"(\d+)", line)]
+    raise NotImplementedError
 
 
 def compare_natural(a: str, b: str) -> int:
@@ -70,8 +64,7 @@ def compare_natural(a: str, b: str) -> int:
     ``int``. Для сравнения смешанных типов проще собирать кортежи
     ``(0, число)`` / ``(1, текст.lower())``.
     """
-    parts_a, parts_b = _split_natural(a.strip().lower()), _split_natural(b.strip().lower())
-    return (parts_a > parts_b) - (parts_a < parts_b)
+    raise NotImplementedError
 
 
 def natural_sort(strings: list[str]) -> list[str]:
@@ -84,4 +77,4 @@ def natural_sort(strings: list[str]) -> list[str]:
 
     Подсказка: ``sorted(strings, key=cmp_to_key(compare_natural))``.
     """
-    return sorted(strings, key=cmp_to_key(compare_natural))
+    raise NotImplementedError

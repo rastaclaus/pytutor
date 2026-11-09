@@ -45,7 +45,7 @@ def make_queue(initial: Iterable[int]) -> deque[int]:
 
     Подсказка: ``deque(initial)``.
     """
-    return deque(initial)
+    raise NotImplementedError
 
 
 def queue_push_pop(initial: Iterable[int], values: list[int]) -> list[int]:
@@ -62,9 +62,7 @@ def queue_push_pop(initial: Iterable[int], values: list[int]) -> list[int]:
     Подсказка: ``extend(values)``, затем список из ``popleft()``. Длину берите
     до извлечения: ``range(len(dq))``.
     """
-    deq = deque(initial)
-    deq.extend(values)
-    return [deq.popleft() for _ in range(len(deq))]
+    raise NotImplementedError
 
 
 def stack_push_pop(initial: Iterable[int], values: list[int]) -> list[int]:
@@ -80,9 +78,7 @@ def stack_push_pop(initial: Iterable[int], values: list[int]) -> list[int]:
 
     Подсказка: то же, что и в очереди, но ``pop()`` вместо ``popleft()``.
     """
-    deq = deque(initial)
-    deq.extend(values)
-    return [deq.pop() for _ in range(len(deq))]
+    raise NotImplementedError
 
 
 def bounded_history(values: Iterable[int], maxlen: int) -> list[int]:
@@ -100,10 +96,7 @@ def bounded_history(values: Iterable[int], maxlen: int) -> list[int]:
     Подсказка: проверка ``maxlen <= 0``, затем ``list(deque(values,
     maxlen=maxlen))``.
     """
-    if maxlen < 1:
-        msg = "maxlen must be positive"
-        raise ValueError(msg)
-    return list(deque(values, maxlen=maxlen))
+    raise NotImplementedError
 
 
 def add_with_limit(history: deque[int], value: int, maxlen: int) -> deque[int]:
@@ -123,7 +116,4 @@ def add_with_limit(history: deque[int], value: int, maxlen: int) -> deque[int]:
     выполнится ни разу. Не создавайте новый ``deque`` — тест проверяет
     тождество объекта.
     """
-    history.append(value)
-    while len(history) > maxlen:
-        history.popleft()
-    return history
+    raise NotImplementedError

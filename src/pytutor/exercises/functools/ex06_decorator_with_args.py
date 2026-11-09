@@ -17,11 +17,13 @@
 Тексты ошибок: ``retry(0)`` и ``retry(-1)`` должны бросать ``ValueError``
 сразу при создании декоратора (в сообщении есть ``times``), не дожидаясь вызова
 функции.
+
+Сценарий: «устойчивый» HTTP-клиент — некоторые запросы повторяются при сетевых
+сбоях (``retry``), а тест-функции прогоняются фиксированное число раз (``repeat``).
 """
 
 from __future__ import annotations
 
-import functools
 from collections.abc import Callable
 from typing import Any, TypeVar
 
@@ -40,19 +42,11 @@ def repeat(times: int) -> Callable[[F], F]:
     Метаданные сохраняются: ``__name__`` и ``__doc__`` обёрнутой функции
     остаются её собственными.
 
-    Подсказка: ``[func(*args, **kwargs) for _ in range(max(times, 0))]``
-    внутри ``wrapper``, а на ``wrapper`` — ``@wraps(func)``.
+    Подсказка: внутри ``wrapper`` соберите список из результатов повторных
+    вызовов: количество вызовов зависит от ``times`` (думайте про
+    ``range``), а на ``wrapper`` навесьте ``@wraps(func)``.
     """
-    def decorator(func: F) -> Callable[[F], F]:
-        @functools.wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
-            if times < 1:
-                return []
-            return [func(*args, **kwargs) for _ in range(max(times, 0))]
-        return wrapper
-    return decorator
-
-
+    raise NotImplementedError
 
 
 def retry(times: int, exceptions: tuple[type[BaseException], ...] = (Exception,)) -> Callable[[F], F]:
@@ -75,23 +69,4 @@ def retry(times: int, exceptions: tuple[type[BaseException], ...] = (Exception,)
     попытке просто дайте исключению уйти (или сохраните его и бросьте после
     цикла). Один и тот же ``except`` не должен ловить ``BaseException`` целиком.
     """
-    if times < 1:
-        msg = "times must be >= 1"
-        raise ValueError(msg)
-
-    def decorator(func: F) -> Callable[[F], F]:
-        @functools.wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
-            for attempt in range(times):
-                try:
-                    return func(*args, **kwargs)
-                except exceptions:
-                    if attempt == times-1:
-                        raise
-            msg = "unreachible code"
-            raise RuntimeError(msg)
-        return wrapper
-    return decorator
-
-
-
+    raise NotImplementedError
