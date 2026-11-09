@@ -89,7 +89,11 @@ def _set_progress(module: str) -> tuple[int, int, str | None]:
 
 def _print_status(module: str | None) -> None:
     """Показать прогресс по наборам."""
-    sets = [module] if module is not None else _exercise_sets()
+    known = _exercise_sets()
+    if module is not None and module not in known:
+        print(f"Неизвестный набор: {module}. Доступны: {', '.join(known)}", file=sys.stderr)
+        raise SystemExit(1)
+    sets = [module] if module is not None else known
     print("Прогресс (по телам функций без NotImplementedError):")
     total_done, total_all = 0, 0
     for name in sets:

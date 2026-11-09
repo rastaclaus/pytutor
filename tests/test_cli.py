@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 import pytutor
 
 
@@ -42,3 +44,10 @@ def test_set_listing_has_marks(capsys) -> None:
 
 def test_unknown_set_fails() -> None:
     assert pytutor.main(["no-such-set"]) == 1
+
+
+def test_status_unknown_set_fails(capsys) -> None:
+    with pytest.raises(SystemExit) as exc_info:
+        pytutor.main(["status", "no-such-set"])
+    assert exc_info.value.code == 1
+    assert "Неизвестный набор" in capsys.readouterr().err
