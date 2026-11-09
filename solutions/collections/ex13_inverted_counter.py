@@ -6,7 +6,7 @@ from collections import Counter, defaultdict
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Iterator
 
 
 def _words(text: str) -> list[str]:
@@ -38,3 +38,19 @@ def top_terms(index: dict[str, list[int]], n: int) -> list[tuple[str, int]]:
         ((word, len(doc_ids)) for word, doc_ids in index.items()),
         key=lambda item: (-item[1], item[0]),
     )[:n]
+
+
+def inverted_index_iter(
+    documents: Iterable[str],
+) -> Iterator[tuple[str, list[int]]]:
+    """Бонус: ленивый инвертированный индекс.
+
+    Читает источник один раз, возвращает пары «слово -> отсортированный
+    список номеров документов». Сам индекс материализуется внутри генератора,
+    но пары отдаются по одной, а не одним списком.
+    """
+    index: defaultdict[str, set[int]] = defaultdict(set)
+    for doc_id, document in enumerate(documents):
+        for word in set(_words(document)):
+            index[word].add(doc_id)
+    yield from ((word, sorted(doc_ids)) for word, doc_ids in index.items())

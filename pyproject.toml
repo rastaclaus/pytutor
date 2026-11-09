@@ -24,4 +24,9 @@ testpaths = ["tests"]
 pythonpath = ["src"]
 # importlib-режим обязателен: тестовые файлы разных наборов называются одинаково
 # (tests/exercises/<модуль>/test_exNN_*.py), иначе pytest ругается на дубли имён.
-addopts = "-q --import-mode=importlib"
+addopts = "-q --import-mode=importlib -m 'not bonus'"
+markers = [
+  # Необязательные задачи повышенной сложности: по умолчанию исключаются
+  # из прогона. Включить: `uv run pytest -m bonus` (или PYTUTOR_ALL=1).
+  "bonus: необязательное бонусное задание",
+]

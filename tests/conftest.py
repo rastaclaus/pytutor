@@ -11,6 +11,7 @@
 
     uv run pytest                       # проверяем ваши решения
     PYTUTOR_SOLUTION=1 uv run pytest    # проверяем эталоны
+    uv run pytest -m bonus              # бонусные задания (не в базовом прогоне)
 """
 
 from __future__ import annotations

@@ -29,7 +29,7 @@ from collections import Counter, defaultdict
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Iterator
 
 
 def inverted_index(documents: Iterable[str]) -> dict[str, list[int]]:
@@ -47,6 +47,30 @@ def inverted_index(documents: Iterable[str]) -> dict[str, list[int]]:
     ``defaultdict(set)`` (множество само уберёт дубли), а в конце отсортируйте
     каждый список. ``defaultdict(list)`` тоже сработает, но требует ручной
     проверки на дубликат.
+
+    Бонус: ``inverted_index_iter`` — ленивая версия: принимает итератор
+    документов, читает его ровно один раз и возвращает итератор пар
+    ``(слово, отсортированный_список_номеров)``, не материализуя весь индекс
+    до начала потребления. Проверяется тестом с пометкой ``bonus``
+    (``uv run pytest -m bonus``).
+    """
+    raise NotImplementedError
+
+
+def inverted_index_iter(documents: Iterable[str]) -> Iterator[tuple[str, list[int]]]:
+    """Бонус: ленивая версия ``inverted_index``.
+
+    Принимает итератор документов, читает его ровно один раз, возвращает
+    итератор пар ``(слово, отсортированный_список_номеров_документов)``.
+
+    ``list(inverted_index_iter(["а б", "б в"]))`` ->
+    ``[("а", [0]), ("б", [0, 1]), ("в", [1])]`` (порядок пар не проверяется);
+    до начала потребления источник не читается;
+    ``inverted_index_iter([])`` не выдаёт ни одной пары.
+
+    Подсказка: обычный ``defaultdict(set)`` плюс генератор, который в конце
+    отдаёт пары по одной; объявите функцию как генератор (``yield`` внутри),
+    чтобы источник не читался до первого ``next()``.
     """
     raise NotImplementedError
 
