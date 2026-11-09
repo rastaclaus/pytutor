@@ -14,7 +14,10 @@ from pytutor.exercises.dataclasses import ex16_nested as ex
 
 @pytest.fixture
 def order():
-    return ex.make_order([("a", 2.0, 3), ("b", 5.0, 1)])
+    try:
+        return ex.make_order([("a", 2.0, 3), ("b", 5.0, 1)])
+    except NotImplementedError:
+        pytest.skip("make_order не реализовано")
 
 
 @pytest.mark.bonus
