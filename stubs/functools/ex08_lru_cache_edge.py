@@ -61,3 +61,22 @@ def limited(x: int) -> int:
     Подсказка: ``@lru_cache(maxsize=2)``.
     """
     raise NotImplementedError
+
+
+def make_stats_tracker(maxsize: int) -> dict[str, int]:
+    """Бонус: вернуть статистику кэша после серии вызовов.
+
+    Внутри создаётся локальная функция ``square(x) -> x * x`` с
+    ``@lru_cache(maxsize=maxsize)``, она вызывается по разу для каждого
+    аргумента из ``0..9``, затем ещё раз для ``0..4``. Функция возвращает
+    словарь с ключами ``hits``, ``misses`` и ``currsize`` из ``cache_info()``.
+
+    ``make_stats_tracker(20)`` -> ``{"hits": 5, "misses": 10, "currsize": 10}``;
+    ``make_stats_tracker(3)`` -> ``{"hits": 0, "misses": 15, "currsize": 3}`` —
+    маленький кэш всё время вытесняется, повторов не остаётся.
+
+    Подсказка: декоратор навешивается в момент определения локальной функции,
+    а ``cache_info()`` вызывается у самой функции. Проверяется тестом с
+    пометкой ``bonus`` (``uv run pytest -m bonus``).
+    """
+    raise NotImplementedError
